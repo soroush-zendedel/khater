@@ -1,0 +1,2031 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>دفترچه مهندسی فونت فارسی</title>
+    
+    <!-- فونت وزیرمتن برای رابط کاربری -->
+    <link href="./css/vazirmatn.css" rel="stylesheet" type="text/css" />
+    
+    <!-- Tailwind CSS برای استایل‌دهی سریع -->
+    <script src="./js/tailwindcss.js"></script>
+    
+    <!-- کتابخانه SheetJS برای خواندن فایل اکسل در مرورگر -->
+    <script src="./js/xlsx.full.min.js"></script>
+
+    <!-- اضافه شدن کتابخانه OpenType.js برای استخراج اطلاعات دقیق فونت -->
+    <script src="./js/opentype.min.js"></script>
+
+    <style>
+        :root {
+            --font-size-pt: 44pt;
+            --h-top-pad: 5mm;
+            --h-bottom-pad: 5mm;
+            /* متغیر فونت کاستوم - به صورت پیش‌فرض وزیرمتن است */
+            --custom-font: 'Vazirmatn';
+            
+            /* متغیرهای پایه برای رنگ و شفافیت جهت سازگاری با حالت‌های رنگی و چاپ */
+            --c1-r: 15; --c1-g: 23; --c1-b: 42;
+            --c2-r: 15; --c2-g: 23; --c2-b: 42;
+            
+            --alpha-1: 0.35;
+            --alpha-2: 0.08;
+            --alpha-default: 0.18;
+            
+            /* رنگ‌های نهایی ترکیب شده (توسط جاوااسکریپت و مودال آپدیت می‌شوند) */
+            --char-c1: rgba(var(--c1-r), var(--c1-g), var(--c1-b), var(--alpha-1));
+            --char-c2: rgba(var(--c2-r), var(--c2-g), var(--c2-b), var(--alpha-2));
+        }
+
+        body {
+            font-family: 'Vazirmatn', Tahoma, sans-serif;
+            background-color: #f3f4f6;
+            margin: 0;
+            padding: 0;
+            /* اجبار مرورگر به چاپ دقیق رنگ‌ها و بک‌گراندها */
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+        }
+
+        /* ---------------------------------------------------- */
+        /* استایل‌های حیاتی برای پرینت بومی (Vector Print)      */
+        /* ---------------------------------------------------- */
+        @page {
+            size: A4 portrait;
+            /* مارجین استاندارد کاغذ. این باعث می‌شود بین تمام صفحات فاصله بیفتد */
+            margin: 15mm; 
+        }
+
+        @media print {
+            body { 
+                background-color: #fff; 
+                margin: 0;
+                padding: 0;
+            }
+            .no-print { display: none !important; }
+            
+            #pdf-content {
+                box-shadow: none !important;
+                margin: 0 !important;
+                padding: 0 !important;
+                width: 100% !important;
+                max-width: 100%;
+            }
+            
+            .row-container {
+                page-break-inside: avoid !important;
+                break-inside: avoid !important;
+                margin-bottom: 8mm !important;
+            }
+            
+            .header-banner-print {
+                margin-bottom: 15mm !important;
+            }
+            /* جلوگیری از چاپ شدن مودال */
+            #glyphModal, #exportModal, #practiceModal, #colorSettingsModal { display: none !important; }
+        }
+        /* ---------------------------------------------------- */
+
+        #pdf-content {
+            background: white;
+            margin: 0 auto;
+            width: 210mm; 
+            min-height: 297mm; 
+            padding: 20mm 15mm;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .row-container {
+            position: relative;
+            width: 100%;
+            margin-bottom: 8mm;
+            border: 1px solid #dcdde1;
+            background-color: #fff;
+            border-radius: 4px;
+            overflow: hidden;
+            box-sizing: border-box;
+            page-break-inside: avoid;
+            transition: all 0.3s ease;
+        }
+        
+        .meta-box {
+            position: absolute;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            width: 30mm;
+            background-color: #fdfdfd;
+            border-left: 1px solid #dcdde1;
+            z-index: 20;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            transition: background-color 0.2s ease, box-shadow 0.2s ease, border-color 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .meta-box:hover {
+            background-color: #f1f5f9;
+            box-shadow: inset 0 0 8px rgba(0,0,0,0.03);
+        }
+        
+        .glyph-name { font-size: 9pt; font-weight: bold; color: #2c3e50; margin-bottom: 2mm; pointer-events: none; transition: color 0.3s ease;}
+        .glyph-type { font-size: 7pt; color: #7f8c8d; background: #ecf0f1; padding: 2px 6px; border-radius: 12px; border: 1px solid #dcdde1; pointer-events: none; transition: all 0.3s ease;}
+        
+        .glyph-note { 
+            font-size: 6pt; color: #7f8c8d; margin-top: 2mm; padding-top: 2mm; border-top: 1px dotted #dcdde1; 
+            width: 80%; pointer-events: none;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            padding-left: 2px;
+            padding-right: 2px;
+            transition: all 0.3s ease;
+        }
+        
+        .h-line { position: absolute; right: 30mm; left: 0; z-index: 5; transition: all 0.3s ease;}
+        
+        .line-asc { border-top: 1px dashed #b2bec3; }
+        .line-cap { border-top: 1px dashed #ffa502; opacity: 0.75; } 
+        .line-x { border-top: 1px solid #74b9ff; opacity: 0.7; }
+        .line-base { border-top: 1.5px solid #2d3436; }
+        .line-desc { border-top: 1px dashed #ff7675; opacity: 0.8; }
+        
+        .line-label {
+            position: absolute; left: 3mm; bottom: -0.5mm;
+            font-size: 6pt; color: #b2bec3; direction: ltr; font-family: monospace;
+            transition: color 0.3s ease;
+            padding: 0 2px;
+        }
+
+        .line-cap .line-label { color: #b2bec3; }
+
+        .reference-box {
+            position: absolute; right: 30mm; top: 0; bottom: 0; width: 25mm;
+            border-left: 2px solid #bdc3c7; z-index: 10; 
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .reference-box:hover {
+            background-color: rgba(99, 102, 241, 0.05);
+        }
+        
+        .reference-box:hover .glyph-display {
+            color: #4f46e5;
+            transform: scale(1.05);
+            transition: all 0.2s ease;
+        }
+
+        .export-icon-overlay {
+            position: absolute;
+            top: 2mm; left: 2mm;
+            opacity: 0;
+            color: #4f46e5;
+            transition: opacity 0.2s ease;
+            z-index: 60;
+            pointer-events: none;
+        }
+        .reference-box:hover .export-icon-overlay {
+            opacity: 1;
+        }
+        
+        .glyph-baseline-container {
+            position: absolute; top: 0; left: 0; right: 0;
+            display: flex;
+            align-items: baseline;
+            justify-content: center;
+            z-index: 50; 
+            pointer-events: none;
+        }
+        
+        .glyph-baseline-container::after {
+            content: '';
+            display: inline-block;
+            height: 100%;
+            width: 0;
+            z-index: 50;
+        }
+        
+        .glyph-display {
+            font-size: var(--font-size-pt);
+            color: #2d3436;
+            font-family: var(--custom-font), 'Vazirmatn', Tahoma, sans-serif;
+            position: relative;
+            z-index: 50;
+            transition: all 0.2s ease;
+        }
+
+        .advance-tick {
+            position: absolute;
+            width: 1px;
+            height: 8px;
+            background-color: #8e44ad;
+            z-index: 15;
+            transition: all 0.3s ease;
+            transform: translateY(-50%);
+        }
+
+        .kerning-tick {
+            position: absolute;
+            width: 1.5px;
+            height: 15px;
+            background-color: #e11d48;
+            z-index: 15;
+            transition: all 0.3s ease;
+            transform: translateY(50%);
+            bottom: 0; 
+            opacity: 0.9;
+        }
+        
+        /* ---------------------------------------------------- */
+        /* استایل‌های ناحیه تمرین و نوشتار پیوسته                 */
+        /* ---------------------------------------------------- */
+        .practice-area {
+            position: absolute; right: 55mm; top: 0; bottom: 0; left: 0; z-index: 1; 
+            display: flex;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+
+        .practice-area:hover {
+            background-color: rgba(99, 102, 241, 0.015);
+        }
+        
+        .practice-col {
+            height: 100%; width: 25mm; 
+            border-left: 1px solid #cbd5e1; 
+            position: relative;
+            transition: border-color 0.3s ease;
+        }
+        
+        .micro-grid { 
+            position: absolute; top: 0; bottom: 0; width: 0; 
+            border-right: 1px dotted #e2e8f0; 
+            z-index: 0; 
+            transition: border-color 0.3s ease;
+        }
+
+        .practice-area.continuous-mode .practice-col {
+            border-left-color: transparent !important;
+        }
+        .practice-area.continuous-mode .micro-grid {
+            border-right-color: transparent !important;
+        }
+
+        .practice-text-overlay {
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            display: flex;
+            align-items: baseline;
+            z-index: 10;
+            pointer-events: none;
+            /* استفاده از متغیر آلفای پیش‌فرض که قابل تنظیم است */
+            opacity: var(--alpha-default); 
+            white-space: nowrap;
+        }
+
+        .practice-text-overlay.colors-enabled {
+            opacity: 1 !important;
+        }
+
+        .practice-text-overlay::after {
+            content: '';
+            display: inline-block;
+            height: 100%;
+            width: 0;
+        }
+
+        .practice-text-string {
+            font-size: var(--font-size-pt);
+            font-family: var(--custom-font), 'Vazirmatn', Tahoma, sans-serif;
+            color: #0f172a;
+        }
+
+        .char-color-1 {
+            color: var(--char-c1); 
+        }
+        .char-color-2 {
+            color: var(--char-c2); 
+        }
+
+        /* ---------------------------------------------------- */
+        /* استایل‌های حالت چاپ سیاه و سفید                      */
+        /* ---------------------------------------------------- */
+        .bw-mode .row-container { border-color: #333; }
+        .bw-mode .meta-box { border-left-color: #333; background-color: #fff; }
+        .bw-mode .meta-box:hover { background-color: #f9f9f9; }
+        .bw-mode .glyph-name { color: #000; }
+        .bw-mode .glyph-type { background: #fff; border-color: #333; color: #000; font-weight: bold;}
+        .bw-mode .glyph-note { color: #333; border-top-color: #888; }
+        .bw-mode .line-asc { border-top: 1px dashed #555; opacity: 1; }
+        .bw-mode .line-cap { border-top: 1.5px dashed #444; opacity: 1; } 
+        .bw-mode .line-cap .line-label { color: #000; }
+        .bw-mode .line-x { border-top: 2px dotted #000; opacity: 1; }
+        .bw-mode .line-base { border-top: 2px solid #000; opacity: 1; }
+        .bw-mode .line-desc { border-top: 1px dashed #777; opacity: 1; }
+        .bw-mode .line-label { color: #000; font-weight: bold; font-size: 6.5pt;}
+        .bw-mode .reference-box { border-left-color: #555; }
+        .bw-mode .practice-col { border-left: 1px solid #bbb; } 
+        .bw-mode .micro-grid { border-right: 1px dotted #e5e5e5; } 
+        .bw-mode .advance-tick { background-color: #000; width: 1px; height: 10px; }
+        .bw-mode .kerning-tick { background-color: #555; }
+        
+        /* در چاپ سیاه و سفید فقط مقادیر RGB را به مشکی تغییر می‌دهیم اما آلفا (شفافیت) حفظ می‌شود */
+        .bw-mode {
+            --c1-r: 0; --c1-g: 0; --c1-b: 0;
+            --c2-r: 0; --c2-g: 0; --c2-b: 0;
+        }
+        
+        .bw-mode .practice-text-string { color: #000 !important; }
+        .bw-mode .practice-text-overlay.colors-enabled { opacity: 1 !important; }
+
+        .bw-mode #print-footer { border-top-color: #ddd; }
+        .bw-mode #print-footer, .bw-mode #print-footer * { color: #666 !important; }
+        .bw-mode #print-footer .license-badge { border: 1px solid #ccc; background: transparent !important; }
+        /* ---------------------------------------------------- */
+
+        #messageBox {
+            transition: opacity 0.3s ease, transform 0.3s ease;
+            transform: translateY(20px);
+        }
+        #messageBox.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .modal-blur {
+            backdrop-filter: blur(4px);
+        }
+
+        .checkered-bg {
+            background-color: #ffffff;
+            background-image: 
+                linear-gradient(45deg, #f0f0f0 25%, transparent 25%, transparent 75%, #f0f0f0 75%, #f0f0f0),
+                linear-gradient(45deg, #f0f0f0 25%, transparent 25%, transparent 75%, #f0f0f0 75%, #f0f0f0);
+            background-size: 20px 20px;
+            background-position: 0 0, 10px 10px;
+        }
+
+        #svgPreviewWrapper {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        #svgPreviewWrapper svg {
+            max-width: 100%;
+            max-height: 100%;
+            width: auto;
+            height: auto;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.15), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+            background-color: white;
+            border: 1px solid #cbd5e1;
+            display: block; 
+        }
+
+        .premium-chk {
+            width: 14px;
+            height: 14px;
+            accent-color: #6366f1;
+            cursor: pointer;
+        }
+
+        select::-webkit-scrollbar {
+            width: 8px;
+        }
+        select::-webkit-scrollbar-track {
+            background: #1e293b;
+        }
+        select::-webkit-scrollbar-thumb {
+            background: #475569;
+            border-radius: 4px;
+        }
+
+        input[type=range] {
+            -webkit-appearance: none;
+            width: 100%;
+            background: transparent;
+        }
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            height: 16px; width: 16px;
+            border-radius: 50%;
+            background: #4f46e5;
+            cursor: pointer;
+            margin-top: -6px;
+        }
+        input[type=range]::-webkit-slider-runnable-track {
+            width: 100%; height: 4px;
+            cursor: pointer;
+            background: #cbd5e1;
+            border-radius: 2px;
+        }
+    </style>
+</head>
+<body class="flex flex-col items-center pb-20 relative min-h-screen">
+
+    <div class="no-print w-full bg-slate-900 border-b border-slate-700 shadow-xl z-40 relative mb-8">
+        
+        <div class="flex flex-col md:flex-row justify-between items-center px-6 py-4 border-b border-slate-800 bg-slate-900/80">
+            
+            <div class="flex items-center gap-4">
+                <!-- نمایش لوگو -->
+                    <div class="w-12 h-12 bg-white rounded-xl p-1 flex items-center justify-center shadow-lg border border-slate-200">
+                        <!-- مسیر تصویر لوگو -->
+                        <img src="./img/khater.png" alt="لوگو خط‌ِر" class="w-full h-full object-contain" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSJjdXJyZW50Q29sb3IiIHN0cm9rZS13aWR0aD0iMiI+PHBhdGggc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIiBkPSJNMTIgMTlsOSAyLThtLTkgLTJsOS0ybTAtOWwzIDNMNyAybTEwIDUuNWwtOC04Ii8+PC9zdmc+'" />
+                    </div>
+                <a href="index.html">
+                <div>
+                    <div>
+                        <span class="text-xl font-black text-white tracking-tight">خـــط‌ِر <span class="text-xs text-slate-400 font-normal tracking-normal hidden sm:inline-block">(KhAter)</span></span>
+                    </div>
+                    <p class="text-xs text-slate-400">دفترچه مهندسی و آنالیز دقیق فونت فارسی</p>
+                </div>
+                </a>
+            </div>
+            
+            
+            <div class="flex flex-wrap gap-2 items-center justify-center">
+                <button id="toggleBwBtn" onclick="togglePrintMode()" class="bg-slate-800 hover:bg-slate-700 text-slate-300 px-4 py-2 rounded-lg transition-colors border border-slate-700 shadow flex items-center gap-2 text-sm font-medium">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+                    </svg>
+                    <span id="bwBtnText">چاپ: رنگی</span>
+                </button>
+                <button onclick="window.print()" class="bg-emerald-600 hover:bg-emerald-500 text-white px-5 py-2 rounded-lg shadow-lg transition flex items-center gap-2 font-medium text-sm shadow-emerald-900/20">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M5 4v3H4a2 2 0 00-2 2v3a2 2 0 002 2h1v2a2 2 0 002 2h6a2 2 0 002-2v-2h1a2 2 0 002-2V9a2 2 0 00-2-2h-1V4a2 2 0 00-2-2H7a2 2 0 00-2 2zm8 0H7v3h6V4zm0 8H7v4h6v-4z" clip-rule="evenodd" />
+                    </svg>
+                    تولید فایل PDF
+                </button>
+            </div>
+        </div>
+
+        <!-- کارت‌های داشبورد تنظیمات -->
+        <div class="p-6 grid grid-cols-1 lg:grid-cols-12 gap-6 max-w-7xl mx-auto">
+            
+            <!-- کارت 1: مدیریت داده‌ها -->
+            <div class="lg:col-span-4 bg-slate-800 rounded-xl border border-slate-700/60 p-5 flex flex-col gap-4 shadow-sm">
+                <div class="flex items-center gap-2 text-emerald-400 border-b border-slate-700/60 pb-3">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path d="M7 3a1 1 0 000 2h6a1 1 0 100-2H7zM4 7a1 1 0 011-1h10a1 1 0 110 2H5a1 1 0 01-1-1zM2 11a2 2 0 012-2h12a2 2 0 012 2v4a2 2 0 01-2 2H4a2 2 0 01-2-2v-4z" /></svg>
+                    <h3 class="text-sm font-bold text-slate-200">مدیریت داده‌ها (گلیف‌ها)</h3>
+                </div>
+                
+                <div class="grid grid-cols-2 gap-2">
+                    <!-- دکمه جدید برای بارگیری دیتای اکسل پیش‌فرض از کنار برنامه -->
+                    <button onclick="loadDefaultExcel()" class="col-span-2 bg-emerald-600/20 hover:bg-emerald-500/30 px-3 py-2.5 rounded-lg cursor-pointer transition flex items-center justify-center gap-2 border border-emerald-600/50 text-emerald-400 text-xs text-center group font-medium shadow-sm">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 group-hover:-translate-y-0.5 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" /></svg>
+                        <span>بارگیری کل حروف (فایل پیش‌فرض)</span>
+                    </button>
+                    
+                    <label class="bg-slate-700/50 hover:bg-slate-600 px-3 py-2.5 rounded-lg cursor-pointer transition flex flex-col items-center justify-center gap-1.5 border border-slate-600 text-slate-300 text-xs text-center group">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-emerald-400 group-hover:-translate-y-0.5 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" /></svg>
+                        <span id="excelUploadText">آپلود اکسل</span>
+                        <input type="file" id="excelUpload" accept=".xlsx, .xls" class="hidden">
+                    </label>
+                    
+                    <button onclick="exportToExcel()" class="bg-slate-700/50 hover:bg-slate-600 px-3 py-2.5 rounded-lg cursor-pointer transition flex flex-col items-center justify-center gap-1.5 border border-slate-600 text-slate-300 text-xs text-center group">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-sky-400 group-hover:translate-y-0.5 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4-4m0 0l-4-4m4 4V4" /></svg>
+                        <span>دانلود اکسل</span>
+                    </button>
+                </div>
+
+                <div class="bg-slate-900/50 rounded-lg p-3 border border-slate-700 mt-auto">
+                    <div class="text-xs text-slate-400 mb-2">افزودن دستی گلیف با یونیکد:</div>
+                    <div class="flex gap-2">
+                        <select id="inpAddPosition" class="w-1/3 bg-slate-800 text-slate-300 px-2 py-2 rounded outline-none text-xs border border-slate-600 focus:border-indigo-500 transition-colors">
+                            <option value="top">ابتدا</option>
+                            <option value="bottom">انتها</option>
+                        </select>
+                        <input type="text" id="inpUnicode" placeholder="یونیکد و یا خود حرف" class="w-2/3 bg-slate-800 text-white px-3 py-2 rounded outline-none text-sm font-mono border border-slate-600 focus:border-indigo-500 text-left transition-colors" dir="ltr" onkeypress="if(event.key === 'Enter') addManualUnicode()">
+                    </div>
+                    <button onclick="addManualUnicode()" class="w-full mt-2 bg-indigo-600/90 hover:bg-indigo-500 text-white px-3 py-2 rounded transition text-xs font-medium border border-indigo-500 flex justify-center items-center gap-1">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd" /></svg>
+                        افزودن سطر
+                    </button>
+                </div>
+            </div>
+
+            <!-- کارت 2: مدیریت فونت -->
+            <div class="lg:col-span-3 bg-slate-800 rounded-xl border border-slate-700/60 p-5 flex flex-col gap-4 shadow-sm">
+                <div class="flex items-center gap-2 text-violet-400 border-b border-slate-700/60 pb-3">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm3 2h6v4H7V5zm8 8v2h1v-2h-1zm-2-2H7v4h6v-4zm2 0h1V9h-1v2zm1-4V5h-1v2h1zM5 5v2H4V5h1zm0 4H4v2h1V9zm-1 4h1v2H4v-2z" clip-rule="evenodd" /></svg>
+                    <h3 class="text-sm font-bold text-slate-200">مدیریت فونت</h3>
+                </div>
+
+                <label class="bg-indigo-600/90 hover:bg-indigo-500 w-full px-4 py-2.5 rounded-lg cursor-pointer transition flex items-center justify-center gap-2 border border-indigo-500 shadow-sm text-sm text-white group">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 group-hover:-translate-y-0.5 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" /></svg>
+                    <span id="fontUploadText" class="truncate max-w-[150px] inline-block align-bottom">آپلود فایل فونت</span>
+                    <input type="file" id="fontUpload" accept=".ttf, .otf, .woff, .woff2" class="hidden">
+                </label>
+
+                <div class="bg-slate-900/50 rounded-lg p-3 border border-slate-700 mt-auto">
+                    <div class="text-xs text-slate-400 mb-2">اسکن هوشمند پوشه‌ها:</div>
+                    <div class="flex gap-1 mb-2">
+                        <button onclick="scanServerFontsFolder(true)" class="flex-1 bg-slate-700 hover:bg-slate-600 py-1.5 rounded transition text-slate-300 text-xs border border-slate-600 flex justify-center items-center gap-1" title="جستجو در سرور">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 text-emerald-400" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M2 5a2 2 0 012-2h12a2 2 0 012 2v10a2 2 0 01-2 2H4a2 2 0 01-2-2V5zm3.293 1.293a1 1 0 011.414 0l3 3a1 1 0 010 1.414l-3 3a1 1 0 01-1.414-1.414L7.586 10 5.293 7.707a1 1 0 010-1.414zM11 12a1 1 0 100 2h3a1 1 0 100-2h-3z" clip-rule="evenodd" /></svg>
+                            سرور
+                        </button>
+                        <button onclick="scanFontsFolder()" class="flex-1 bg-slate-700 hover:bg-slate-600 py-1.5 rounded transition text-slate-300 text-xs border border-slate-600 flex justify-center items-center gap-1" title="جستجو در سیستم شما">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 text-sky-400" viewBox="0 0 20 20" fill="currentColor"><path d="M2 6a2 2 0 012-2h5l2 2h5a2 2 0 012 2v6a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" /></svg>
+                            سیستم
+                        </button>
+                    </div>
+                    <select id="scannedFontSelect" class="w-full bg-slate-800 text-slate-300 px-2 py-2 rounded outline-none text-xs border border-slate-600 cursor-pointer focus:border-indigo-500 transition-colors" onchange="loadScannedFont(this)">
+                        <option value="">لیست فونت‌های یافته شده...</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- کارت 3: تنظیمات متریک -->
+            <div class="lg:col-span-5 bg-slate-800 rounded-xl border border-slate-700/60 p-5 flex flex-col gap-4 shadow-sm relative overflow-hidden">
+                <div class="flex items-center justify-between border-b border-slate-700/60 pb-3">
+                    <div class="flex items-center gap-2 text-amber-400">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 4a2 2 0 114 0v1a1 1 0 001 1h3a1 1 0 011 1v3a1 1 0 01-1 1h-1a2 2 0 100 4h1a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1v-1a2 2 0 10-4 0v1a1 1 0 01-1 1H7a1 1 0 01-1-1v-3a1 1 0 00-1-1H4a2 2 0 110-4h1a1 1 0 001-1V7a1 1 0 011-1h3a1 1 0 001-1V4z" /></svg>
+                        <h3 class="text-sm font-bold text-slate-200">پارامترهای متریک فونت</h3>
+                    </div>
+                    <span id="autoMetricsInfo" class="hidden text-[10px] bg-emerald-500/20 text-emerald-400 px-2 py-0.5 rounded-full border border-emerald-500/30">به‌روزرسانی خودکار</span>
+                </div>
+
+                <div class="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-3 flex-1">
+                    <!-- UPM -->
+                    <div class="bg-slate-900/50 p-2 rounded-lg border border-slate-700 flex flex-col justify-between">
+                        <div class="flex items-center justify-between mb-2">
+                            <label for="chkShowUpm" class="text-[10px] text-slate-400 cursor-pointer select-none">UPM / Em</label>
+                            <input type="checkbox" id="chkShowUpm" checked class="premium-chk" onchange="autoApplyMetrics()">
+                        </div>
+                        <select id="upmSelect" class="bg-slate-800 text-white rounded px-2 py-1.5 border border-slate-600 outline-none focus:border-indigo-500 w-full text-xs text-center">
+                            <option value="1000">1000</option>
+                            <option value="2048">2048</option>
+                        </select>
+                    </div>
+
+                    <!-- Ascender -->
+                    <div class="bg-slate-900/50 p-2 rounded-lg border border-slate-700 flex flex-col justify-between">
+                        <div class="flex items-center justify-between mb-2">
+                            <label for="chkShowAscender" class="text-[10px] text-slate-400 cursor-pointer select-none">Ascender (فراز)</label>
+                            <input type="checkbox" id="chkShowAscender" checked class="premium-chk" onchange="autoApplyMetrics()">
+                        </div>
+                        <input type="number" id="inpAscender" value="950" class="bg-slate-800 text-white rounded px-2 py-1.5 border border-slate-600 outline-none focus:border-indigo-500 w-full text-xs text-center font-mono" oninput="debouncedAutoApplyMetrics()">
+                    </div>
+
+                    <!-- Cap Height -->
+                    <div class="bg-slate-900/50 p-2 rounded-lg border border-slate-700 flex flex-col justify-between">
+                        <div class="flex items-center justify-between mb-2">
+                            <label for="chkShowCapHeight" class="text-[10px] text-slate-400 cursor-pointer select-none">Cap Height</label>
+                            <input type="checkbox" id="chkShowCapHeight" checked class="premium-chk" onchange="autoApplyMetrics()">
+                        </div>
+                        <input type="number" id="inpCapHeight" value="700" class="bg-slate-800 text-white rounded px-2 py-1.5 border border-slate-600 outline-none focus:border-indigo-500 w-full text-xs text-center font-mono" oninput="debouncedAutoApplyMetrics()">
+                    </div>
+
+                    <!-- x-Height -->
+                    <div class="bg-slate-900/50 p-2 rounded-lg border border-slate-700 flex flex-col justify-between">
+                        <div class="flex items-center justify-between mb-2">
+                            <label for="chkShowXHeight" class="text-[10px] text-slate-400 cursor-pointer select-none">x-Height</label>
+                            <input type="checkbox" id="chkShowXHeight" checked class="premium-chk" onchange="autoApplyMetrics()">
+                        </div>
+                        <input type="number" id="inpXHeight" value="530" class="bg-slate-800 text-white rounded px-2 py-1.5 border border-slate-600 outline-none focus:border-indigo-500 w-full text-xs text-center font-mono" oninput="debouncedAutoApplyMetrics()">
+                    </div>
+
+                    <!-- Descender -->
+                    <div class="bg-slate-900/50 p-2 rounded-lg border border-slate-700 flex flex-col justify-between">
+                        <div class="flex items-center justify-between mb-2">
+                            <label for="chkShowDescender" class="text-[10px] text-slate-400 cursor-pointer select-none">Desc (فرود)</label>
+                            <input type="checkbox" id="chkShowDescender" checked class="premium-chk" onchange="autoApplyMetrics()">
+                        </div>
+                        <input type="number" id="inpDescender" value="320" class="bg-slate-800 text-white rounded px-2 py-1.5 border border-slate-600 outline-none focus:border-indigo-500 w-full text-xs text-center font-mono" oninput="debouncedAutoApplyMetrics()">
+                    </div>
+                    
+                    <!-- Kerning Toggle -->
+                    <div class="bg-slate-900/50 p-2 rounded-lg border border-slate-700 flex flex-col justify-between">
+                        <div class="flex items-center justify-between mb-2">
+                            <label for="chkShowKerning" class="text-[10px] text-slate-400 cursor-pointer select-none">فواصل (Kerning)</label>
+                            <input type="checkbox" id="chkShowKerning" class="premium-chk" onchange="autoApplyMetrics()">
+                        </div>
+                        <div class="h-[30px] flex items-center justify-center text-emerald-500/80 text-[10px] font-mono bg-slate-800/40 border border-slate-600 rounded select-none cursor-default" title="نمایش محل اتصال و کرنینگ کاراکترها در ناحیه تمرین">OpenType Data</div>
+                    </div>
+
+                    <!-- Alternating Colors Toggle + Modal Button -->
+                    <div class="bg-slate-900/50 p-2 rounded-lg border border-slate-700 flex flex-col justify-between md:col-span-1 xl:col-span-2">
+                        <div class="flex items-center justify-between mb-2">
+                            <label for="chkShowCharColors" class="text-[10px] text-slate-400 cursor-pointer select-none">تفکیک رنگی حروف</label>
+                            <input type="checkbox" id="chkShowCharColors" checked class="premium-chk" onchange="autoApplyMetrics()">
+                        </div>
+                        <button onclick="openColorSettingsModal()" class="h-[30px] w-full flex items-center justify-center gap-1.5 text-sky-400 text-[10px] bg-slate-800 hover:bg-slate-700 border border-slate-600 rounded transition-colors cursor-pointer" title="تغییر رنگ‌بندی یا شفافیت حروف">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01" /></svg>
+                            <span id="btnColorModalText">تنظیم رنگ‌بندی حروف</span>
+                        </button>
+                    </div>
+                </div>
+
+                <button id="btnApplyMetrics" class="w-full mt-3 bg-slate-700 hover:bg-slate-600 text-white px-4 py-2 rounded-lg transition shadow-sm text-xs font-medium border border-slate-600 flex justify-center items-center gap-1.5">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
+                    اعمال دستی تنظیمات و ترسیم مجدد
+                </button>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- دیالوگ‌های پیام سیستم -->
+    <div id="messageBox" class="fixed bottom-6 left-6 px-6 py-3 rounded-lg shadow-xl text-white font-medium opacity-0 pointer-events-none z-50 bg-slate-800">
+        پیام سیستم
+    </div>
+
+    <!-- محتوای اصلی دفترچه -->
+    <div id="pdf-content" class="page-container">
+        <div class="header-banner-print text-center mb-8 pb-4 border-b-2 border-slate-200">
+            <h1 class="text-3xl font-bold text-slate-800 mb-2">دفترچه تمرین و مهندسی فونت فارسی</h1>
+            <p class="text-slate-500">بر اساس تناسبات استاندارد تایپوگرافی</p>
+        </div>
+        
+        <div id="rows-container">
+            <!-- سطرها اینجا لود می‌شوند -->
+        </div>
+
+        <div class="break-inside-avoid mt-16 pt-6 border-t border-slate-200 flex flex-col items-center justify-center gap-2.5 text-slate-400 text-[10px] print:mt-12 print:pt-5 print:border-slate-300 print:text-slate-500 pb-4 w-full" id="print-footer">
+            <div>
+                    <div class="flex items-center gap-2 mb-4">
+                        <div class="w-8 h-8 bg-white rounded p-0.5">
+                            <img src="./img/khater.png" alt="لوگو" class="w-full h-full object-contain" onerror="this.style.display='none'">
+                        </div>
+                        <span class="text-xl font-black">خط‌ِر <span class="text-sm font-normal text-slate-400">| KhAter</span></span>
+                    </div>
+            </div>
+            <p>
+                یک ابزار متن‌باز برای ارتقای سطح مهندسی تایپ‌فیس‌های فارسی.
+            </p>
+            <div class="flex flex-wrap justify-center items-center gap-x-4 gap-y-1">
+                <span>طراح و توسعه‌دهنده: <strong class="text-slate-500 print:text-slate-600 font-bold">سروش زنده‌دل</strong></span>
+                <span class="text-slate-200 print:text-slate-300">|</span>
+                <a href="mailto:Soroush_zendedel@live.com" class="hover:text-slate-600 print:text-slate-500 transition-colors font-mono text-[11px]" dir="ltr">Soroush_zendedel@live.com</a>
+            </div>
+            <div class="flex flex-col sm:flex-row justify-center items-center gap-x-2 gap-y-1.5 text-center max-w-2xl text-[9px] leading-relaxed">
+                <span class="license-badge font-bold text-slate-500 print:text-slate-600 bg-slate-100 print:bg-transparent px-2 py-0.5 rounded transition-colors">لایسنس CC BY-NC 4.0</span>
+                <span class="text-slate-400 print:text-slate-500">استفاده، اشتراک‌گذاری و تغییر غیرتجاری با ذکر نام پدیدآورنده آزاد است. جهت هرگونه استفاده تجاری لطفاً تماس بگیرید.</span>
+            </div>
+            <a href="https://github.com/soroush-zendedel/khater" target="_blank" class="text-slate-400 print:text-slate-500 hover:text-slate-600 print:hover:text-slate-500 transition-colors font-mono text-[11px] underline">
+                https://github.com/soroush-zendedel/khater
+            </a>
+        </div>
+    </div>
+
+    <!-- مودال متادیتا -->
+    <div id="glyphModal" class="modal-blur fixed inset-0 bg-slate-900/60 z-[100] flex items-center justify-center opacity-0 pointer-events-none transition-opacity duration-300" onclick="if(event.target === this) closeGlyphModal()">
+        <div id="glyphModalContent" class="bg-white rounded-xl shadow-2xl w-[90%] max-w-2xl max-h-[90vh] flex flex-col transform scale-95 transition-transform duration-300">
+            <div class="p-6 overflow-y-auto" id="glyphModalBody"></div>
+            <div class="p-4 border-t border-slate-100 bg-slate-50 rounded-b-xl flex justify-between items-center">
+                <button onclick="deleteFromModal()" class="px-4 py-2 bg-red-100 hover:bg-red-200 text-red-700 font-medium rounded-lg transition flex items-center gap-2 text-sm shadow-sm border border-red-200">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                    </svg>
+                    حذف این سطر
+                </button>
+                <div class="flex gap-2">
+                    <button onclick="closeGlyphModal()" class="px-4 py-2 bg-slate-200 hover:bg-slate-300 text-slate-700 font-medium rounded-lg transition shadow-sm text-sm">انصراف</button>
+                    <button onclick="saveModalChanges()" class="px-5 py-2 bg-indigo-600 hover:bg-indigo-500 text-white font-medium rounded-lg transition shadow text-sm flex items-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                        </svg>
+                        ذخیره تغییرات
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- مودال کلمه/جمله تمرینی -->
+    <div id="practiceModal" class="modal-blur fixed inset-0 bg-slate-900/60 z-[100] flex items-center justify-center opacity-0 pointer-events-none transition-opacity duration-300" onclick="if(event.target === this) closePracticeModal()">
+        <div id="practiceModalContent" class="bg-white rounded-xl shadow-2xl w-[90%] max-w-md flex flex-col transform scale-95 transition-transform duration-300">
+            <div class="p-6">
+                <h3 class="text-lg font-bold text-slate-800 mb-2">افزودن متن تمرین</h3>
+                <p class="text-xs text-slate-500 mb-4">یک کلمه یا جمله بنویسید تا به عنوان الگوی کم‌رنگ روی خط کرسی در ناحیه تمرین قرار گیرد. برای حذف الگو، کادر را خالی بگذارید.</p>
+                <input type="text" id="inpPracticeText" placeholder="متن مورد نظر خود را بنویسید..." class="w-full border border-slate-300 rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all" onkeypress="if(event.key === 'Enter') savePracticeText()">
+            </div>
+            <div class="p-4 border-t border-slate-100 bg-slate-50 rounded-b-xl flex justify-between items-center">
+                <button onclick="clearPracticeText()" class="px-4 py-2 bg-slate-200 hover:bg-slate-300 text-slate-700 font-medium rounded-lg transition text-sm">حذف نوشته</button>
+                <div class="flex gap-2">
+                    <button onclick="closePracticeModal()" class="px-4 py-2 bg-slate-200 hover:bg-slate-300 text-slate-700 font-medium rounded-lg transition text-sm">انصراف</button>
+                    <button onclick="savePracticeText()" class="px-5 py-2 bg-indigo-600 hover:bg-indigo-500 text-white font-medium rounded-lg transition shadow text-sm">اعمال نوشته</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- مودال تنظیمات رنگ‌بندی حروف (اصلاح شده) -->
+    <div id="colorSettingsModal" class="modal-blur fixed inset-0 bg-slate-900/60 z-[100] flex items-center justify-center opacity-0 pointer-events-none transition-opacity duration-300" onclick="if(event.target === this) closeColorSettingsModal()">
+        <div id="colorSettingsModalContent" class="bg-white rounded-xl shadow-2xl w-[90%] max-w-sm flex flex-col transform scale-95 transition-transform duration-300">
+            <div class="p-6">
+                <h3 class="text-lg font-bold text-slate-800 mb-1">تنظیمات نمایشی حروف</h3>
+                <p id="colorModalDesc" class="text-xs text-slate-500 mb-5">رنگ و میزان شفافیت را تغییر دهید.</p>
+                
+                <div id="alternatingColorsSettings" class="space-y-4">
+                    <div class="bg-slate-50 p-3 rounded-lg border border-slate-200">
+                        <label class="block text-sm font-bold text-slate-700 mb-2">رنگ حرف اول (فرد)</label>
+                        <div class="flex gap-3 items-center">
+                            <input type="color" id="inpColor1" value="#0f172a" class="w-10 h-10 rounded cursor-pointer border-0 p-0" oninput="previewColorSettings()">
+                            <div class="flex-1">
+                                <div class="text-[10px] text-slate-500 mb-1 flex justify-between">
+                                    <span>شفافیت (Opacity)</span>
+                                    <span id="lblAlpha1">35%</span>
+                                </div>
+                                <input type="range" id="inpAlpha1" min="0" max="1" step="0.01" value="0.35" class="w-full" oninput="previewColorSettings()">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-slate-50 p-3 rounded-lg border border-slate-200">
+                        <label class="block text-sm font-bold text-slate-700 mb-2">رنگ حرف دوم (زوج)</label>
+                        <div class="flex gap-3 items-center">
+                            <input type="color" id="inpColor2" value="#0f172a" class="w-10 h-10 rounded cursor-pointer border-0 p-0" oninput="previewColorSettings()">
+                            <div class="flex-1">
+                                <div class="text-[10px] text-slate-500 mb-1 flex justify-between">
+                                    <span>شفافیت (Opacity)</span>
+                                    <span id="lblAlpha2">8%</span>
+                                </div>
+                                <input type="range" id="inpAlpha2" min="0" max="1" step="0.01" value="0.08" class="w-full" oninput="previewColorSettings()">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="defaultOpacitySettings" class="space-y-4 hidden">
+                    <div class="bg-slate-50 p-3 rounded-lg border border-slate-200">
+                        <label class="block text-sm font-bold text-slate-700 mb-2">شفافیت پایه متن تمرین</label>
+                        <div class="flex gap-3 items-center">
+                            <div class="flex-1">
+                                <div class="text-[10px] text-slate-500 mb-1 flex justify-between">
+                                    <span>شفافیت (Opacity)</span>
+                                    <span id="lblAlphaDefault">18%</span>
+                                </div>
+                                <input type="range" id="inpAlphaDefault" min="0" max="1" step="0.01" value="0.18" class="w-full" oninput="previewColorSettings()">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="p-4 border-t border-slate-100 bg-slate-50 rounded-b-xl flex justify-end gap-2">
+                <button onclick="resetColorSettings()" class="px-4 py-2 bg-slate-200 hover:bg-slate-300 text-slate-700 font-medium rounded-lg transition text-sm ml-auto">بازیابی پیش‌فرض</button>
+                <button onclick="closeColorSettingsModal()" class="px-5 py-2 bg-indigo-600 hover:bg-indigo-500 text-white font-medium rounded-lg transition shadow text-sm">تایید و بستن</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- مودال خروجی گرفتن SVG/PNG دقیق بر اساس UPM -->
+    <div id="exportModal" class="modal-blur fixed inset-0 bg-slate-900/80 z-[110] flex items-center justify-center opacity-0 pointer-events-none transition-opacity duration-300" onclick="if(event.target === this) closeExportModal()">
+        <div id="exportModalContent" class="bg-white rounded-xl shadow-2xl w-[95%] max-w-4xl h-[90vh] flex flex-col transform scale-95 transition-transform duration-300">
+            <!-- هدر -->
+            <div class="px-6 py-4 border-b border-slate-200 flex justify-between items-center bg-slate-50 rounded-t-xl">
+                <div>
+                    <h2 class="text-lg font-bold text-slate-800">خروجی راهنمای طراحی (بر اساس عرض UPM)</h2>
+                    <p class="text-xs text-slate-500 mt-1">فایل SVG برای دقت کامل، حاوی استایل‌های توکار (Embedded) رندر می‌شود تا در همه محیط‌ها صحیح و بدون وابستگی نمایش داده شود.</p>
+                </div>
+                <button onclick="closeExportModal()" class="text-slate-400 hover:text-slate-600 p-2 rounded-full hover:bg-slate-200 transition">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+            
+            <div class="p-4 md:p-6 flex-1 overflow-hidden bg-slate-100 checkered-bg relative" id="exportPreviewContainer">
+                <div id="svgPreviewWrapper">
+                    <!-- SVG اینجا تزریق می‌شود -->
+                </div>
+            </div>
+            
+            <div class="p-5 border-t border-slate-200 bg-white rounded-b-xl flex justify-between items-center">
+                <div class="text-sm text-slate-600 flex items-center gap-2">
+                    <span class="inline-block w-3 h-3 rounded-full bg-emerald-500"></span>
+                    رزولوشن فایل دانلودی، دقیقاً منطبق بر مقدار UPM خواهد بود.
+                </div>
+                <div class="flex gap-3">
+                    <button id="btnDownloadPNG" class="px-5 py-2.5 bg-sky-600 hover:bg-sky-500 text-white font-medium rounded-lg transition shadow text-sm flex items-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4-4m0 0l-4-4m4 4V4" />
+                        </svg>
+                        دانلود PNG
+                    </button>
+                    <button id="btnDownloadSVG" class="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white font-medium rounded-lg transition shadow text-sm flex items-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
+                        </svg>
+                        دانلود SVG
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- کدهای JS -->
+    <script>
+        function escapeHTML(str) {
+            if (str === null || str === undefined) return '';
+            return String(str)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#39;');
+        }
+        
+        let currentData = [];
+        let parsedFont = null;
+        let defaultParsedFont = null; 
+        let currentUPM = 1000;
+        let fontMetrics = {
+            ascender: 950,
+            capHeight: 700,
+            xHeight: 530,
+            descender: 320
+        };
+
+        // متغیرهای ذخیره‌سازی وضعیت نمایش خطوط راهنما
+        let metricVisibility = {
+            upm: true,
+            ascender: true,
+            capHeight: true,
+            xHeight: true,
+            baseline: true,
+            descender: true,
+            kerning: false, 
+            charColors: true 
+        };
+
+        // تنظیمات رنگ کاراکترها و شفافیت پایه‌ی متن (به روز رسانی شده)
+        let charColorSettings = {
+            color1: '#0f172a', alpha1: 0.35,
+            color2: '#0f172a', alpha2: 0.08,
+            alphaDefault: 0.18
+        };
+
+        let isBwModeActive = false;
+        
+        let activeExportSVGString = "";
+        let activeExportFileName = "glyph";
+        let activeExportWidth = 1000;
+        let activeExportHeight = 1500;
+        
+        let activeCustomFontBase64 = null;
+        let activeCustomFontName = null;
+
+        window.glyphBoxDataMap = [];
+
+        // اضافه‌شدن متون تمرین پیش‌فرض به رکوردها
+        const defaultData = [
+            {'دسته بندی': 'حروف پایه', 'شناسه': 1, 'نام گلیف': 'x', 'یونیکد': 'U+0078', 'خانواده اسکلت': 'x', 'تگ OpenType': 'isol, fina', 'فرم منفرد': 'x', 'فرم ابتدایی': '-', 'فرم میانی': '-', 'فرم انتهایی': '', 'نمونه اتصال راست': '', 'نمونه اتصال چپ': '', 'درجه سختی': 1, 'یادداشت': '', 'نمونه متن فرم منفرد': 'بِه نامِ خُداوَند', 'نمونه متن فرم انتهایی': ''},
+            {'دسته بندی': 'حروف پایه', 'شناسه': 2, 'نام گلیف': 'الف (ا)', 'یونیکد': 'U+0627', 'خانواده اسکلت': 'ا', 'تگ OpenType': 'isol, fina', 'فرم منفرد': 'ا', 'فرم ابتدایی': '-', 'فرم میانی': '-', 'فرم انتهایی': '‍ا', 'نمونه اتصال راست': 'با', 'نمونه اتصال چپ': 'اب', 'درجه سختی': 1, 'یادداشت': 'بدون اتصال به چپ', 'نمونه متن فرم منفرد': '', 'نمونه متن فرم انتهایی': 'با'},
+            {'دسته بندی': 'حروف پایه', 'شناسه': 3, 'نام گلیف': 'الف با کلاه (آ)', 'یونیکد': 'U+0622', 'خانواده اسکلت': 'ا', 'تگ OpenType': 'isol, fina', 'فرم منفرد': 'آ', 'فرم ابتدایی': '-', 'فرم میانی': '-', 'فرم انتهایی': '‍آ', 'نمونه اتصال راست': 'بآ', 'نمونه اتصال چپ': 'آب', 'درجه سختی': 1, 'یادداشت': 'دارای کلاه (مد)', 'نمونه متن فرم منفرد': 'آب', 'نمونه متن فرم انتهایی': 'مآخذ'},
+            {'دسته بندی': 'حروف پایه', 'شناسه': 4, 'نام گلیف': 'ب', 'یونیکد': 'U+0628', 'خانواده اسکلت': 'ب', 'تگ OpenType': 'isol, init, medi, fina', 'فرم منفرد': 'ب', 'فرم ابتدایی': 'ب‍', 'فرم میانی': '‍ب‍', 'فرم انتهایی': '‍ب', 'نمونه اتصال راست': 'بب', 'نمونه اتصال چپ': 'تب', 'درجه سختی': 1, 'یادداشت': 'پایه خانواده ب', 'نمونه متن فرم منفرد': 'آب', 'نمونه متن فرم ابتدایی': 'بابا', 'نمونه متن فرم میانی': 'ببر', 'نمونه متن فرم انتهایی': 'تب'},
+            {'دسته بندی': 'حروف پایه', 'شناسه': 5, 'نام گلیف': 'پ', 'یونیکد': 'U+067E', 'خانواده اسکلت': 'ب', 'تگ OpenType': 'isol, init, medi, fina', 'فرم منفرد': 'پ', 'فرم ابتدایی': 'پ‍', 'فرم میانی': '‍پ‍', 'فرم انتهایی': '‍پ', 'نمونه اتصال راست': 'پب', 'نمونه اتصال چپ': 'تپ', 'درجه سختی': 1, 'یادداشت': 'پایه خانواده ب', 'نمونه متن فرم منفرد': 'چاپ', 'نمونه متن فرم ابتدایی': 'پرنده', 'نمونه متن فرم میانی': 'سپهر', 'نمونه متن فرم انتهایی': 'چپ'},
+            {'دسته بندی': 'حروف پایه', 'شناسه': 6, 'نام گلیف': 'ج', 'یونیکد': 'U+062C', 'خانواده اسکلت': 'ج', 'تگ OpenType': 'isol, init, medi, fina', 'فرم منفرد': 'ج', 'فرم ابتدایی': 'ج‍', 'فرم میانی': '‍ج‍', 'فرم انتهایی': '‍ج', 'نمونه اتصال راست': 'بج', 'نمونه اتصال چپ': 'جب', 'درجه سختی': 2, 'یادداشت': 'پایه خانواده ج', 'نمونه متن فرم منفرد': 'تاج', 'نمونه متن فرم ابتدایی': 'جان', 'نمونه متن فرم میانی': 'نجم', 'نمونه متن فرم انتهایی': 'رنج'}
+        ];
+
+        function showMessage(msg, type = 'success') {
+            const msgBox = document.getElementById('messageBox');
+            msgBox.innerText = msg;
+            
+            if (type === 'error') {
+                msgBox.className = 'fixed bottom-6 right-6 px-6 py-3 rounded-lg shadow-xl text-white font-medium z-50 bg-red-500 show';
+            } else if (type === 'warning') {
+                msgBox.className = 'fixed bottom-6 right-6 px-6 py-3 rounded-lg shadow-xl text-slate-800 font-medium z-50 bg-yellow-400 show';
+            } else {
+                msgBox.className = 'fixed bottom-6 right-6 px-6 py-3 rounded-lg shadow-xl text-white font-medium z-50 bg-emerald-500 show';
+            }
+            
+            setTimeout(() => {
+                msgBox.classList.remove('show');
+                msgBox.classList.add('opacity-0');
+            }, 3000);
+        }
+
+        // تبدیل هگز به شیء حاوی اعداد رنگی (جهت پشتیبانی از متغیرهای CSS به صورت تفکیک‌شده)
+        function hexToRgb(hex) {
+            let r = parseInt(hex.slice(1, 3), 16),
+                g = parseInt(hex.slice(3, 5), 16),
+                b = parseInt(hex.slice(5, 7), 16);
+            return {r, g, b};
+        }
+
+        function openColorSettingsModal() {
+            document.getElementById('inpColor1').value = charColorSettings.color1;
+            document.getElementById('inpAlpha1').value = charColorSettings.alpha1;
+            document.getElementById('inpColor2').value = charColorSettings.color2;
+            document.getElementById('inpAlpha2').value = charColorSettings.alpha2;
+            document.getElementById('inpAlphaDefault').value = charColorSettings.alphaDefault;
+            
+            document.getElementById('lblAlpha1').innerText = Math.round(charColorSettings.alpha1 * 100) + '%';
+            document.getElementById('lblAlpha2').innerText = Math.round(charColorSettings.alpha2 * 100) + '%';
+            document.getElementById('lblAlphaDefault').innerText = Math.round(charColorSettings.alphaDefault * 100) + '%';
+
+            // نمایش هوشمند پنل‌ها بر اساس وضعیت تفکیک رنگی
+            if (metricVisibility.charColors) {
+                document.getElementById('alternatingColorsSettings').style.display = 'block';
+                document.getElementById('defaultOpacitySettings').style.display = 'none';
+                document.getElementById('colorModalDesc').innerText = 'رنگ و میزان شفافیت را برای تشخیص بهتر مرز حروف در جملات تمرینی تغییر دهید.';
+            } else {
+                document.getElementById('alternatingColorsSettings').style.display = 'none';
+                document.getElementById('defaultOpacitySettings').style.display = 'block';
+                document.getElementById('colorModalDesc').innerText = 'میزان شفافیت (Opacity) متن تمرین را در حالت یکپارچه تنظیم کنید.';
+            }
+
+            const modal = document.getElementById('colorSettingsModal');
+            const modalContent = document.getElementById('colorSettingsModalContent');
+            modal.classList.remove('opacity-0', 'pointer-events-none');
+            modalContent.classList.remove('scale-95');
+        }
+
+        function previewColorSettings() {
+            charColorSettings.color1 = document.getElementById('inpColor1').value;
+            charColorSettings.alpha1 = parseFloat(document.getElementById('inpAlpha1').value);
+            charColorSettings.color2 = document.getElementById('inpColor2').value;
+            charColorSettings.alpha2 = parseFloat(document.getElementById('inpAlpha2').value);
+            charColorSettings.alphaDefault = parseFloat(document.getElementById('inpAlphaDefault').value);
+
+            document.getElementById('lblAlpha1').innerText = Math.round(charColorSettings.alpha1 * 100) + '%';
+            document.getElementById('lblAlpha2').innerText = Math.round(charColorSettings.alpha2 * 100) + '%';
+            document.getElementById('lblAlphaDefault').innerText = Math.round(charColorSettings.alphaDefault * 100) + '%';
+
+            // تبدیل هگز به RGB برای به‌روزرسانی متغیرهای CSS
+            const c1 = hexToRgb(charColorSettings.color1);
+            const c2 = hexToRgb(charColorSettings.color2);
+
+            // آپدیت سریع متغیرهای CSS به صورت زنده
+            document.documentElement.style.setProperty('--c1-r', c1.r);
+            document.documentElement.style.setProperty('--c1-g', c1.g);
+            document.documentElement.style.setProperty('--c1-b', c1.b);
+            document.documentElement.style.setProperty('--alpha-1', charColorSettings.alpha1);
+            
+            document.documentElement.style.setProperty('--c2-r', c2.r);
+            document.documentElement.style.setProperty('--c2-g', c2.g);
+            document.documentElement.style.setProperty('--c2-b', c2.b);
+            document.documentElement.style.setProperty('--alpha-2', charColorSettings.alpha2);
+            
+            document.documentElement.style.setProperty('--alpha-default', charColorSettings.alphaDefault);
+        }
+
+        function resetColorSettings() {
+            document.getElementById('inpColor1').value = '#0f172a';
+            document.getElementById('inpAlpha1').value = 0.35;
+            document.getElementById('inpColor2').value = '#0f172a';
+            document.getElementById('inpAlpha2').value = 0.08;
+            document.getElementById('inpAlphaDefault').value = 0.18;
+            previewColorSettings();
+        }
+
+        function closeColorSettingsModal() {
+            document.getElementById('colorSettingsModal').classList.add('opacity-0', 'pointer-events-none');
+            document.getElementById('colorSettingsModalContent').classList.add('scale-95');
+        }
+
+        async function loadDefaultFont() {
+            
+            const fontUrl = './fonts/Vazirmatn-Regular.ttf';
+            
+            try {
+                const response = await fetch(fontUrl);
+                // اگر سرور چیزی غیر از 200 برگرداند، خطا تولید کن
+                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                
+                const buffer = await response.arrayBuffer();
+                defaultParsedFont = opentype.parse(buffer);
+                
+            } catch (err) {
+                console.error("خطا در بارگذاری فونت پیش‌فرض:", err);
+            }
+        }
+
+        function togglePrintMode() {
+            isBwModeActive = !isBwModeActive;
+            const pdfContent = document.getElementById('pdf-content');
+            const btnText = document.getElementById('bwBtnText');
+            const toggleBtn = document.getElementById('toggleBwBtn');
+            
+            if (isBwModeActive) {
+                pdfContent.classList.add('bw-mode');
+                btnText.innerText = 'چاپ: سیاه و سفید';
+                toggleBtn.classList.replace('bg-slate-800', 'bg-zinc-800');
+                toggleBtn.classList.replace('hover:bg-slate-700', 'hover:bg-zinc-700');
+            } else {
+                pdfContent.classList.remove('bw-mode');
+                btnText.innerText = 'چاپ: رنگی';
+                toggleBtn.classList.replace('bg-zinc-800', 'bg-slate-800');
+                toggleBtn.classList.replace('hover:bg-zinc-700', 'hover:bg-slate-700');
+            }
+        }
+
+        function addManualUnicode() {
+            const inputEl = document.getElementById('inpUnicode');
+            let val = inputEl.value.trim();
+            if(!val) return showMessage('لطفا یک کاراکتر یا کد یونیکد وارد کنید.', 'warning');
+
+            let hexStr = '';
+            let char = '';
+
+            const hexRegex = /^(?:uni|U\+|u\+)?([0-9A-Fa-f]{2,6})$/;
+            const isLikelyHexCode = hexRegex.test(val);
+
+            if (isLikelyHexCode && val.length > 1) {
+                const match = val.match(hexRegex);
+                hexStr = match[1].toUpperCase();
+                try {
+                    const codePoint = parseInt(hexStr, 16);
+                    char = String.fromCodePoint(codePoint);
+                    hexStr = hexStr.padStart(4, '0');
+                } catch (e) {
+                    return showMessage('کد هگز وارد شده نامعتبر است.', 'error');
+                }
+            } else {
+                const chars = [...val]; 
+                if (chars.length === 1) {
+                    char = chars[0];
+                    hexStr = char.codePointAt(0).toString(16).toUpperCase().padStart(4, '0');
+                } else {
+                    return showMessage('لطفاً فقط یک کاراکتر تکی یا یک کد هگز معتبر (مثل 06A4) وارد کنید.', 'error');
+                }
+            }
+
+            try {
+                const newRowData = {
+                    'نام گلیف': 'U+' + hexStr,
+                    'یادداشت': 'افزوده شده دستی',
+                    'فرم منفرد': char, 'فرم ابتدایی': '-', 'فرم میانی': '-', 'فرم انتهایی': '-',
+                    'تگ OpenType': 'دستی', 'درجه سختی': '-'
+                };
+
+                if (document.getElementById('inpAddPosition').value === 'bottom') currentData.push(newRowData);
+                else currentData.unshift(newRowData);
+                
+                renderWorkbook(currentData);
+                showMessage(`کاراکتر «${char}» (U+${hexStr}) اضافه شد.`);
+                inputEl.value = '';
+            } catch (e) {
+                showMessage('خطا در افزودن سطر.', 'error');
+            }
+        }
+
+        function openGlyphModal(boxIndex) {
+            const dataObj = window.glyphBoxDataMap[boxIndex];
+            if (!dataObj) return;
+
+            window.currentActiveBoxIndex = boxIndex;
+            const modal = document.getElementById('glyphModal');
+            const modalContent = document.getElementById('glyphModalContent');
+            const modalBody = document.getElementById('glyphModalBody');
+
+            let allKeys = new Set(['نام گلیف', 'یادداشت', 'فرم منفرد', 'فرم ابتدایی', 'فرم میانی', 'فرم انتهایی', 'تگ OpenType', 'درجه سختی']);
+            
+            currentData.forEach(r => Object.keys(r).forEach(k => { 
+                if (!k.endsWith('_type') && !k.startsWith('practice_text_') && !k.startsWith('نمونه متن ')) {
+                    allKeys.add(k); 
+                }
+            }));
+
+            let detailsHtml = '<div class="grid grid-cols-1 md:grid-cols-2 gap-4">';
+            Array.from(allKeys).forEach(key => {
+                let editValue = dataObj.row[key] || '';
+                if (key.trim() === 'یادداشت') {
+                    detailsHtml += `<div class="col-span-1 md:col-span-2"><label class="block text-xs font-bold mb-1">${key}</label><textarea data-field-key="${key}" class="modal-edit-input w-full border rounded px-3 py-2 text-sm">${editValue}</textarea></div>`;
+                } else {
+                    detailsHtml += `<div><label class="block text-xs font-bold mb-1">${key}</label><input type="text" data-field-key="${key}" value="${editValue}" class="modal-edit-input w-full border rounded px-2 py-1.5 text-sm"></div>`;
+                }
+            });
+            detailsHtml += '</div>';
+
+            modalBody.innerHTML = detailsHtml;
+            modal.classList.remove('opacity-0', 'pointer-events-none');
+            modalContent.classList.remove('scale-95');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function saveModalChanges() {
+            if (window.currentActiveBoxIndex === undefined) return;
+            const dataObj = window.glyphBoxDataMap[window.currentActiveBoxIndex];
+            if (!dataObj) return;
+
+            document.querySelectorAll('.modal-edit-input').forEach(input => {
+                const key = input.getAttribute('data-field-key');
+                if (key) dataObj.row[key] = input.value;
+            });
+            renderWorkbook(currentData);
+            closeGlyphModal();
+            showMessage('تغییرات ذخیره شد.');
+        }
+
+        function deleteFromModal() {
+            if (window.currentActiveBoxIndex === undefined) return;
+            const dataObj = window.glyphBoxDataMap[window.currentActiveBoxIndex];
+            const dataIndex = currentData.indexOf(dataObj.row);
+            if (dataIndex > -1) {
+                deleteGlyphRow(dataIndex, dataObj.form.key);
+                closeGlyphModal();
+            }
+        }
+
+        function closeGlyphModal() {
+            document.getElementById('glyphModal').classList.add('opacity-0', 'pointer-events-none');
+            document.getElementById('glyphModalContent').classList.add('scale-95');
+            document.body.style.overflow = 'auto';
+        }
+
+        function openPracticeModal(boxIndex) {
+            window.currentActivePracticeBox = boxIndex;
+            const dataObj = window.glyphBoxDataMap[boxIndex];
+            if (!dataObj) return;
+
+            const textKey = 'نمونه متن ' + dataObj.form.key;
+            const currentText = dataObj.row[textKey] || dataObj.row['practice_text_' + dataObj.form.key] || '';
+
+            const inputEl = document.getElementById('inpPracticeText');
+            inputEl.value = currentText;
+            
+            const modal = document.getElementById('practiceModal');
+            const modalContent = document.getElementById('practiceModalContent');
+            modal.classList.remove('opacity-0', 'pointer-events-none');
+            modalContent.classList.remove('scale-95');
+            
+            setTimeout(() => inputEl.focus(), 100);
+        }
+
+        function closePracticeModal() {
+            document.getElementById('practiceModal').classList.add('opacity-0', 'pointer-events-none');
+            document.getElementById('practiceModalContent').classList.add('scale-95');
+        }
+
+        function savePracticeText() {
+            if (window.currentActivePracticeBox === undefined) return;
+            const dataObj = window.glyphBoxDataMap[window.currentActivePracticeBox];
+            if (!dataObj) return;
+
+            const textKey = 'نمونه متن ' + dataObj.form.key;
+            const newText = document.getElementById('inpPracticeText').value.trim();
+            
+            dataObj.row[textKey] = newText;
+            
+            closePracticeModal();
+            renderWorkbook(currentData);
+            if(newText) showMessage('الگوی تمرینی ثبت شد.');
+        }
+
+        function clearPracticeText() {
+            if (window.currentActivePracticeBox === undefined) return;
+            const dataObj = window.glyphBoxDataMap[window.currentActivePracticeBox];
+            if (!dataObj) return;
+
+            const textKey = 'نمونه متن ' + dataObj.form.key;
+            dataObj.row[textKey] = '';
+            
+            closePracticeModal();
+            renderWorkbook(currentData);
+            showMessage('الگو حذف شد و شبکه‌بندی به حالت قبل بازگشت.', 'warning');
+        }
+
+        function openExportModal(boxIndex) {
+            const dataObj = window.glyphBoxDataMap[boxIndex];
+            if (!dataObj) return;
+            
+            const char = dataObj.form.glyph;
+            if(!char || char === '-') return;
+
+            let advWidth = currentUPM;
+            const checkFont = parsedFont || defaultParsedFont;
+            if (checkFont) {
+                try {
+                    const glyphs = checkFont.stringToGlyphs(char);
+                    let totalAdv = 0;
+                    glyphs.forEach(g => totalAdv += (g.advanceWidth || 0));
+                    if (totalAdv > 0) advWidth = totalAdv;
+                } catch(e) {}
+            }
+
+            const svgData = generatePrecisionSVG(char, advWidth);
+            
+            activeExportSVGString = svgData.svg;
+            activeExportWidth = svgData.width;
+            activeExportHeight = svgData.height;
+            const uCode = Array.from(char).map(c => c.charCodeAt(0).toString(16).toUpperCase()).join('-');
+            activeExportFileName = `Glyph_${dataObj.row['نام گلیف'].replace(/[\s\(\)]/g, '_')}_${dataObj.form.name}_U${uCode}`;
+
+            document.getElementById('svgPreviewWrapper').innerHTML = activeExportSVGString;
+
+            const modal = document.getElementById('exportModal');
+            const modalContent = document.getElementById('exportModalContent');
+            modal.classList.remove('opacity-0', 'pointer-events-none');
+            modalContent.classList.remove('scale-95');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeExportModal() {
+            document.getElementById('exportModal').classList.add('opacity-0', 'pointer-events-none');
+            document.getElementById('exportModalContent').classList.add('scale-95');
+            document.body.style.overflow = 'auto';
+            document.getElementById('svgPreviewWrapper').innerHTML = '';
+        }
+
+        function generatePrecisionSVG(char, advanceWidth) {
+            const upm = currentUPM;
+            const asc = fontMetrics.ascender;
+            const cap = fontMetrics.capHeight; 
+            const xh = fontMetrics.xHeight;
+            const desc = fontMetrics.descender; 
+            
+            const padTop = Math.max(Math.round(upm * 0.15), Math.round((upm * 0.85) - asc));
+            const padBottom = Math.round(upm * 0.35); 
+            
+            const width = Math.max(upm + Math.round(upm * 0.2), advanceWidth + Math.round(upm * 0.2)); 
+            const height = padTop + asc + desc + padBottom;
+
+            const yAsc = padTop;
+            const yBase = padTop + asc;
+            const yCap = yBase - cap; 
+            const yX = yBase - xh;
+            const yDesc = yBase + desc;
+
+            let fontDefs = `@import url('./css/vazirmatn.css');`;
+            let fontFamilyText = 'Vazirmatn, sans-serif';
+
+            if (activeCustomFontBase64 && activeCustomFontName) {
+                fontDefs += `\n                @font-face {\n                    font-family: '${activeCustomFontName}';\n                    src: url('${activeCustomFontBase64}') format('truetype');\n                }`;
+                fontFamilyText = `'${activeCustomFontName}', Vazirmatn, sans-serif`;
+            }
+
+            let svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${width} ${height}" dir="ltr" style="background-color: white; direction: ltr;">`;
+            svg += `<defs><style>${fontDefs}</style></defs>`;
+            
+            const uiFont = "monospace";
+            const fSize = Math.round(upm * 0.035);
+            const textX = Math.max(20, Math.round(width * 0.02)); 
+
+            const cols = 10;
+            for(let i = 1; i < cols; i++) {
+                let x = (width / cols) * i;
+                svg += `<line x1="${x}" y1="0" x2="${x}" y2="${height - Math.round(padBottom*0.8)}" stroke="#f1f5f9" stroke-width="${Math.max(1, Math.round(upm*0.002))}"/>`;
+            }
+
+            const strokeW = Math.max(1, Math.round(upm * 0.003));
+            const thickW = Math.max(2, Math.round(upm * 0.006));
+            
+            if (metricVisibility.upm) {
+                const upmBoxX = (width - upm) / 2;
+                const upmBoxY = yBase - Math.round(upm * 0.8);
+                svg += `<rect x="${upmBoxX}" y="${upmBoxY}" width="${upm}" height="${upm}" fill="rgba(15, 23, 42, 0.015)" stroke="#0f172a" stroke-width="${thickW * 1.5}"/>`;
+                svg += `<text x="${upmBoxX}" y="${upmBoxY - Math.round(upm * 0.015)}" font-family="${uiFont}" font-size="${fSize * 0.85}" fill="#0f172a" font-weight="bold" text-anchor="start">UPM Square (${upm} × ${upm})</text>`;
+            }
+
+            if (metricVisibility.ascender) {
+                svg += `<line x1="0" y1="${yAsc}" x2="${width}" y2="${yAsc}" stroke="#cbd5e1" stroke-width="${strokeW}" stroke-dasharray="${upm*0.015},${upm*0.015}"/>`;
+                svg += `<text x="${textX}" y="${yAsc - fSize + (upm*0.01)}" font-family="${uiFont}" font-size="${fSize}" fill="#94a3b8" text-anchor="start">Ascender: ${asc}</text>`;
+            }
+
+            if (metricVisibility.capHeight) {
+                svg += `<line x1="0" y1="${yCap}" x2="${width}" y2="${yCap}" stroke="#ffa502" stroke-width="${strokeW}" stroke-dasharray="${upm*0.01},${upm*0.01}"/>`;
+                svg += `<text x="${textX}" y="${yCap - (upm*0.01)}" font-family="${uiFont}" font-size="${fSize}" fill="#ffa502" text-anchor="start">Cap Height: ${cap}</text>`;
+            }
+
+            if (metricVisibility.xHeight) {
+                svg += `<line x1="0" y1="${yX}" x2="${width}" y2="${yX}" stroke="#74b9ff" stroke-width="${strokeW}"/>`;
+                svg += `<text x="${textX}" y="${yX - (upm*0.01)}" font-family="${uiFont}" font-size="${fSize}" fill="#74b9ff" text-anchor="start">x-Height: ${xh}</text>`;
+            }
+
+            if (metricVisibility.baseline) {
+                svg += `<line x1="0" y1="${yBase}" x2="${width}" y2="${yBase}" stroke="#1e293b" stroke-width="${thickW}"/>`;
+                svg += `<text x="${textX}" y="${yBase - (upm*0.01)}" font-family="${uiFont}" font-size="${fSize}" fill="#1e293b" text-anchor="start">Baseline (0)</text>`;
+            }
+
+            if (metricVisibility.descender) {
+                svg += `<line x1="0" y1="${yDesc}" x2="${width}" y2="${yDesc}" stroke="#ff7675" stroke-width="${strokeW}" stroke-dasharray="${upm*0.015},${upm*0.015}"/>`;
+                svg += `<text x="${textX}" y="${yDesc - (upm*0.01)}" font-family="${uiFont}" font-size="${fSize}" fill="#ff7675" text-anchor="start">Descender: -${desc}</text>`;
+            }
+
+            const yWidthInd = height - Math.round(padBottom * 0.4);
+            const wIndHeight = upm * 0.03;
+            const startX = (width - advanceWidth) / 2;
+            const endX = startX + advanceWidth;
+
+            svg += `<line x1="${startX}" y1="${yWidthInd}" x2="${endX}" y2="${yWidthInd}" stroke="#8e44ad" stroke-width="${thickW}"/>`;
+            
+            const step = upm >= 2000 ? 100 : 50;
+            for(let w = 0; w <= advanceWidth; w += step) {
+                let xPos = startX + w;
+                let tickH = (w % (step * 2) === 0) ? wIndHeight : wIndHeight * 0.6;
+                svg += `<line x1="${xPos}" y1="${yWidthInd - tickH}" x2="${xPos}" y2="${yWidthInd}" stroke="#8e44ad" stroke-width="${Math.max(1, thickW/2)}"/>`;
+                
+                if (w % (step * 2) === 0) {
+                    svg += `<text x="${xPos}" y="${yWidthInd + upm*0.025}" font-family="${uiFont}" font-size="${fSize*0.7}" fill="#8e44ad" text-anchor="middle">${w}</text>`;
+                }
+            }
+
+            if (advanceWidth % step !== 0) {
+                svg += `<line x1="${endX}" y1="${yWidthInd - wIndHeight}" x2="${endX}" y2="${yWidthInd}" stroke="#8e44ad" stroke-width="${thickW/1.5}"/>`;
+            }
+
+            svg += `<text x="${width/2}" y="${yWidthInd - (upm*0.045)}" font-family="${uiFont}"  font-size="${fSize*0.85}" fill="#8e44ad" font-weight="bold" text-anchor="middle">Advance Width: ${advanceWidth}</text>`;
+
+            let pathSvg = `<text x="${width/2}" y="${yBase}" font-family="${fontFamilyText}" font-size="${upm}" text-anchor="middle" fill="#0f172a">${char}</text>`;
+
+            svg += pathSvg;
+            svg += `</svg>`;
+
+            return { svg: svg, width: width, height: height };
+        }
+
+        document.getElementById('btnDownloadSVG').addEventListener('click', () => {
+            if(!activeExportSVGString) return;
+            const blob = new Blob([activeExportSVGString], {type: 'image/svg+xml;charset=utf-8'});
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = activeExportFileName + '.svg';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            showMessage('فایل SVG با موفقیت ساخته و دانلود شد.');
+        });
+
+        document.getElementById('btnDownloadPNG').addEventListener('click', () => {
+            if(!activeExportSVGString) return;
+            
+            const canvas = document.createElement('canvas');
+            canvas.width = activeExportWidth;
+            canvas.height = activeExportHeight;
+            const ctx = canvas.getContext('2d');
+            
+            const img = new Image();
+            const svg64 = btoa(unescape(encodeURIComponent(activeExportSVGString)));
+            img.onload = function() {
+                ctx.fillStyle = '#ffffff';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                ctx.drawImage(img, 0, 0);
+                
+                const pngUrl = canvas.toDataURL("image/png");
+                const a = document.createElement('a');
+                a.href = pngUrl;
+                a.download = activeExportFileName + '.png';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                showMessage('فایل PNG با موفقیت ساخته و دانلود شد.');
+            };
+            img.src = 'data:image/svg+xml;base64,' + svg64;
+        });
+
+        function applyMetricsFromUI() {
+            fontMetrics.ascender = parseInt(document.getElementById('inpAscender').value) || 0;
+            fontMetrics.capHeight = parseInt(document.getElementById('inpCapHeight').value) || 0;
+            fontMetrics.xHeight = parseInt(document.getElementById('inpXHeight').value) || 0;
+            fontMetrics.descender = Math.abs(parseInt(document.getElementById('inpDescender').value) || 0);
+            
+            currentUPM = parseInt(document.getElementById('upmSelect').value) || 1000;
+
+            metricVisibility.upm = document.getElementById('chkShowUpm').checked;
+            metricVisibility.ascender = document.getElementById('chkShowAscender').checked;
+            metricVisibility.capHeight = document.getElementById('chkShowCapHeight').checked;
+            metricVisibility.xHeight = document.getElementById('chkShowXHeight').checked;
+            metricVisibility.descender = document.getElementById('chkShowDescender').checked;
+            metricVisibility.kerning = document.getElementById('chkShowKerning').checked;
+            metricVisibility.charColors = document.getElementById('chkShowCharColors').checked; 
+            
+            // تغییر متن دکمه مودال رنگ بر اساس وضعیت تفکیک رنگی
+            const btnColorModalText = document.getElementById('btnColorModalText');
+            if (btnColorModalText) {
+                btnColorModalText.innerText = metricVisibility.charColors ? 'تنظیم رنگ‌بندی حروف' : 'تنظیم شفافیت متن';
+            }
+        }
+
+        function autoApplyMetrics() {
+            applyMetricsFromUI();
+            renderWorkbook(currentData);
+        }
+
+        let metricsDebounceTimer;
+        
+        function debouncedAutoApplyMetrics() {
+            clearTimeout(metricsDebounceTimer);
+            metricsDebounceTimer = setTimeout(() => {
+                autoApplyMetrics();
+            }, 400); 
+        }
+
+        document.getElementById('upmSelect').addEventListener('change', (e) => {
+            const newUPM = parseInt(e.target.value);
+            const scaleRatio = newUPM / currentUPM;
+
+            fontMetrics.ascender = Math.round(fontMetrics.ascender * scaleRatio);
+            fontMetrics.capHeight = Math.round(fontMetrics.capHeight * scaleRatio);
+            fontMetrics.xHeight = Math.round(fontMetrics.xHeight * scaleRatio);
+            fontMetrics.descender = Math.round(fontMetrics.descender * scaleRatio);
+
+            document.getElementById('inpAscender').value = fontMetrics.ascender;
+            document.getElementById('inpCapHeight').value = fontMetrics.capHeight;
+            document.getElementById('inpXHeight').value = fontMetrics.xHeight;
+            document.getElementById('inpDescender').value = fontMetrics.descender;
+
+            currentUPM = newUPM;
+            autoApplyMetrics(); // اعمال همه تغییرات
+        });
+
+        document.getElementById('btnApplyMetrics').addEventListener('click', () => {
+            autoApplyMetrics();
+            showMessage('تنظیمات متریک اعمال و رسم شد.');
+        });
+
+        window.processFontBuffer = function(buffer, displayName) {
+            const fontName = 'CustomFont_' + Date.now();
+            activeCustomFontName = fontName;
+            
+            const blob = new Blob([buffer], { type: 'font/ttf' });
+            const fontUrl = URL.createObjectURL(blob);
+            const customFont = new FontFace(fontName, `url(${fontUrl})`);
+            
+            customFont.load().then((loadedFont) => {
+                document.fonts.add(loadedFont);
+                document.documentElement.style.setProperty('--custom-font', `"${fontName}"`);
+                
+                const shortName = displayName.length > 20 ? displayName.substring(0, 20) + '...' : displayName;
+                document.getElementById('fontUploadText').innerText = `فونت: ${shortName}`;
+                
+                try {
+                    parsedFont = opentype.parse(buffer);
+                    
+                    const fontData = new Uint8Array(buffer);
+                    let binary = '';
+                    for (let i = 0; i < fontData.byteLength; i++) {
+                        binary += String.fromCharCode(fontData[i]);
+                    }
+                    activeCustomFontBase64 = 'data:font/truetype;charset=utf-8;base64,' + window.btoa(binary);
+
+                    let autoUpdated = false;
+                    if (parsedFont.unitsPerEm) {
+                        currentUPM = parsedFont.unitsPerEm;
+                        const upmSelect = document.getElementById('upmSelect');
+                        if(!Array.from(upmSelect.options).some(opt => opt.value == currentUPM)) {
+                            upmSelect.add(new Option(currentUPM, currentUPM));
+                        }
+                        upmSelect.value = currentUPM;
+                        autoUpdated = true;
+                    }
+                    if (parsedFont.ascender !== undefined) {
+                        fontMetrics.ascender = parsedFont.ascender;
+                        document.getElementById('inpAscender').value = fontMetrics.ascender;
+                        autoUpdated = true;
+                    }
+                    
+                    if (parsedFont.tables && parsedFont.tables.os2 && parsedFont.tables.os2.sCapHeight) {
+                        fontMetrics.capHeight = parsedFont.tables.os2.sCapHeight;
+                        document.getElementById('inpCapHeight').value = fontMetrics.capHeight;
+                        autoUpdated = true;
+                    } else {
+                        fontMetrics.capHeight = Math.round(currentUPM * 0.7);
+                        document.getElementById('inpCapHeight').value = fontMetrics.capHeight;
+                    }
+
+                    if (parsedFont.descender !== undefined) {
+                        fontMetrics.descender = Math.abs(parsedFont.descender);
+                        document.getElementById('inpDescender').value = fontMetrics.descender;
+                        autoUpdated = true;
+                    }
+                    if (parsedFont.tables && parsedFont.tables.os2 && parsedFont.tables.os2.sxHeight) {
+                        fontMetrics.xHeight = parsedFont.tables.os2.sxHeight;
+                        document.getElementById('inpXHeight').value = fontMetrics.xHeight;
+                        autoUpdated = true;
+                    }
+
+                    if(autoUpdated) {
+                        const badge = document.getElementById('autoMetricsInfo');
+                        badge.classList.remove('hidden');
+                        setTimeout(() => badge.classList.add('hidden'), 5000);
+                    }
+
+                    showMessage(`فونت ${shortName} لود شد و اطلاعات آن استخراج گردید.`);
+                    autoApplyMetrics();
+                } catch (err) {
+                    console.error(err);
+                    showMessage('فونت ظاهری اعمال شد اما خواندن متادیتا ممکن نبود.', 'error');
+                    autoApplyMetrics();
+                }
+            }).catch(() => showMessage('خطا در پردازش و نمایش فایل فونت.', 'error'));
+        };
+
+        window.localFontsMap = {};
+        window.serverFontsMap = {};
+
+        window.scanServerFontsFolder = async function(showMsg = false) {
+            // لیستی از فونت‌هایی که در پوشه fonts در گیت‌هاب آپلود کرده‌اید را اینجا بنویسید
+            const defaultFonts = [
+                { name: 'NotoSans', url: './fonts/NotoSansArabic-Regular.ttf' },
+                { name: 'Vazirmatn-Regular', url: './fonts/Vazirmatn-Regular.ttf' },
+                { name: 'Vazirmatn-Bold', url: './fonts/Vazirmatn-Bold.ttf' },
+                { name: 'Lalezar', url: './fonts/Lalezar-Regular.ttf' },
+                { name: 'IRNazanin', url: './fonts/IRNazanin.ttf' },
+                { name: 'IRAban', url: './fonts/IRAban.ttf' },
+                { name: 'Samim', url: './fonts/Samim.ttf' },
+                { name: 'Shabnam', url: './fonts/Shabnam.ttf' },
+                // فونت‌های بیشتر را به همین شکل اضافه کنید
+            ];
+
+            try {
+                const selectEl = document.getElementById('scannedFontSelect');
+                
+                let serverGroup = selectEl.querySelector('optgroup[label="فونت‌های سرور (پیش‌فرض)"]');
+                if(!serverGroup) {
+                    const defaultOpt = selectEl.querySelector('option[value=""]');
+                    if(defaultOpt && (defaultOpt.innerText.includes('خالی') || defaultOpt.innerText.includes('لیست'))) {
+                        defaultOpt.innerText = 'انتخاب فونت...';
+                    }
+                    serverGroup = document.createElement('optgroup');
+                    serverGroup.label = "فونت‌های سرور (پیش‌فرض)";
+                    selectEl.appendChild(serverGroup);
+                } else {
+                    serverGroup.innerHTML = '';
+                }
+
+                defaultFonts.forEach(font => {
+                    window.serverFontsMap[font.name] = font.url;
+                    const opt = document.createElement('option');
+                    opt.value = 'server:' + font.name;
+                    opt.text = font.name;
+                    serverGroup.appendChild(opt);
+                });
+
+                if (showMsg && defaultFonts.length > 0) {
+                    showMessage(`${defaultFonts.length} فونت پیش‌فرض بارگذاری شد.`, 'success');
+                }
+            } catch (err) {
+                console.error('Error loading default fonts:', err);
+                if (showMsg) showMessage('خطا در بارگذاری فونت‌های پیش‌فرض.', 'error');
+            }
+        };
+
+        window.scanFontsFolder = async function() {
+            try {
+                const dirHandle = await window.showDirectoryPicker();
+                
+                const selectEl = document.getElementById('scannedFontSelect');
+                window.localFontsMap = {};
+                
+                let localGroup = selectEl.querySelector('optgroup[label="پوشه محلی"]');
+                if(localGroup) localGroup.remove();
+                
+                localGroup = document.createElement('optgroup');
+                localGroup.label = "پوشه محلی";
+                
+                let foundCount = 0;
+                
+                for await (const entry of dirHandle.values()) {
+                    if (entry.kind === 'file' && entry.name.match(/\.(ttf|otf|woff|woff2)$/i)) {
+                        const file = await entry.getFile();
+                        window.localFontsMap[entry.name] = file;
+                        
+                        const opt = document.createElement('option');
+                        opt.value = entry.name;
+                        opt.text = entry.name;
+                        localGroup.appendChild(opt);
+                        
+                        foundCount++;
+                    }
+                }
+                
+                if (foundCount > 0) {
+                    selectEl.appendChild(localGroup);
+                    const defaultOpt = selectEl.querySelector('option[value=""]');
+                    if(defaultOpt && (defaultOpt.innerText.includes('خالی') || defaultOpt.innerText.includes('لیست'))) {
+                        defaultOpt.innerText = 'انتخاب فونت...';
+                    }
+                    showMessage(`${foundCount} فونت در پوشه پیدا شد.`, 'success');
+                } else {
+                    showMessage('هیچ فونتی با فرمت مجاز در این پوشه یافت نشد.', 'warning');
+                }
+                
+            } catch (err) {
+                console.error(err);
+                if (err.name !== 'AbortError') {
+                    showMessage('مرورگر شما از قابلیت اسکن پوشه پشتیبانی نمی‌کند یا دسترسی داده نشد.', 'error');
+                }
+            }
+        };
+
+        window.loadScannedFont = async function(selectEl) {
+            const val = selectEl.value;
+            if (!val) return;
+            
+            if (val.startsWith('server:')) {
+                const fileName = val.replace('server:', '');
+                const fileUrl = window.serverFontsMap[fileName];
+                if (!fileUrl) return;
+                
+                try {
+                    showMessage(`در حال دریافت ${fileName} از سرور...`, 'success');
+                    const response = await fetch(fileUrl);
+                    if (!response.ok) throw new Error('Network error');
+                    const buffer = await response.arrayBuffer();
+                    processFontBuffer(buffer, fileName);
+                } catch(e) {
+                    console.error(e);
+                    showMessage('خطا در دریافت فونت از سرور.', 'error');
+                }
+            } else {
+                const file = window.localFontsMap[val];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(evt) {
+                        processFontBuffer(evt.target.result, val);
+                    };
+                    reader.readAsArrayBuffer(file);
+                }
+            }
+        };
+
+        document.getElementById('fontUpload').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            const selectEl = document.getElementById('scannedFontSelect');
+            if (selectEl) selectEl.value = "";
+
+            const reader = new FileReader();
+            reader.onload = function(evt) {
+                processFontBuffer(evt.target.result, file.name);
+            };
+            reader.readAsArrayBuffer(file);
+        });
+
+        document.getElementById('excelUpload').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const data = new Uint8Array(e.target.result);
+                    const workbook = XLSX.read(data, {type: 'array'});
+                    const json_data = XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]]);
+                    
+                    if(json_data.length > 0) {
+                        currentData = json_data;
+                        renderWorkbook(currentData);
+                        showMessage('دیتا با موفقیت بارگذاری شد.');
+                        document.getElementById('excelUploadText').innerText = `دیتا: ${file.name.substring(0, 15)}...`;
+                    } else showMessage('فایل اکسل خالی است.', 'error');
+                } catch(error) { showMessage('خطا در خواندن فایل.', 'error'); }
+            };
+            reader.readAsArrayBuffer(file);
+        });
+
+        window.loadDefaultExcel = async function() {
+            try {
+                showMessage('در حال واکشی فایل از سرور...', 'warning');
+                const response = await fetch('Persian_Font_Design_Workbook.xlsx');
+                
+                if (!response.ok) {
+                    throw new Error('فایل یافت نشد');
+                }
+                
+                const arrayBuffer = await response.arrayBuffer();
+                const data = new Uint8Array(arrayBuffer);
+                const workbook = XLSX.read(data, {type: 'array'});
+                const json_data = XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]]);
+                
+                if(json_data.length > 0) {
+                    currentData = json_data;
+                    renderWorkbook(currentData);
+                    showMessage('فایل پیش‌فرض با موفقیت بارگیری و رندر شد.');
+                } else {
+                    throw new Error('فایل خالی است');
+                }
+            } catch(error) {
+                console.warn("Excel fetch failed, falling back to defaultData object.", error);
+                // استفاده از دیتای هاردکد شده داخلی در صورت شکست ریکوئست
+                currentData = defaultData;
+                renderWorkbook(currentData);
+                showMessage('فایل اکسل یافت نشد. دیتای داخلی بارگذاری شد.', 'warning');
+            }
+        };
+        let microGridsHTML = '';
+        for (let j = 1; j < 5; j++) microGridsHTML += `<div class="micro-grid" style="right: ${j * 20}%;"></div>`;
+        let practiceColsHTML = '';
+        for (let i = 0; i < 5; i++) practiceColsHTML += `<div class="practice-col">${microGridsHTML}</div>`;
+
+        window.exportToExcel = function() {
+            if (!currentData || currentData.length === 0) {
+                showMessage('دیتایی برای خروجی گرفتن وجود ندارد.', 'warning');
+                return;
+            }
+            try {
+                const standardHeaders = [
+                    'دسته بندی', 'شناسه', 'نام گلیف', 'یونیکد', 'خانواده اسکلت', 
+                    'تگ OpenType', 'فرم منفرد', 'فرم ابتدایی', 'فرم میانی', 'فرم انتهایی', 
+                    'نمونه اتصال راست', 'نمونه اتصال چپ', 'درجه سختی', 'یادداشت', 
+                    'نمونه متن فرم منفرد', 'نمونه متن فرم ابتدایی', 'نمونه متن فرم میانی', 'نمونه متن فرم انتهایی'
+                ];
+
+                const extraKeys = new Set();
+                currentData.forEach(row => {
+                    Object.keys(row).forEach(key => {
+                        if (!standardHeaders.includes(key) && !key.endsWith('_type') && !key.startsWith('practice_text_')) {
+                            extraKeys.add(key);
+                        }
+                    });
+                });
+                
+                const allHeaders = [...standardHeaders, ...Array.from(extraKeys)];
+
+                const cleanData = currentData.map(row => {
+                    let cleanRow = {};
+                    allHeaders.forEach(header => {
+                        if (header.startsWith('نمونه متن ')) {
+                            const formKey = header.replace('نمونه متن ', '');
+                            cleanRow[header] = row[header] || row['practice_text_' + formKey] || '';
+                        } else {
+                            cleanRow[header] = row[header] !== undefined ? row[header] : '';
+                        }
+                    });
+                    return cleanRow;
+                });
+
+                const ws = XLSX.utils.json_to_sheet(cleanData, { header: allHeaders });
+                const wb = XLSX.utils.book_new();
+                XLSX.utils.book_append_sheet(wb, ws, "Sheet1");
+                
+                XLSX.writeFile(wb, "Persian_Font_Design_Workbook_Export.xlsx");
+                showMessage('فایل اکسل با موفقیت ذخیره و دانلود شد.');
+            } catch (err) {
+                showMessage('خطا در ایجاد فایل اکسل.', 'error');
+                console.error(err);
+            }
+        };
+
+        window.deleteGlyphRow = function(dataIndex, formKey) {
+            if(currentData[dataIndex]) {
+                currentData[dataIndex][formKey] = '-'; 
+                renderWorkbook(currentData);
+                showMessage('سطر مورد نظر حذف شد.', 'warning');
+            }
+        };
+
+
+
+        function renderWorkbook(data) {
+            const container = document.getElementById('rows-container');
+            container.innerHTML = '';
+            let allRowsHtml = ''; // متغیر برای جمع‌آوری کل کدهای HTML
+            window.glyphBoxDataMap = [];
+            let boxIndexCounter = 0;
+            let isFirstRow = true;
+
+            const font_size_pt = 44; 
+            const pt_to_mm = 0.352778;
+            const unit_to_mm = (font_size_pt / currentUPM) * pt_to_mm;
+            
+            const h_top_pad = 5;
+            const h_bottom_pad = 5;
+            
+            const ascender_mm = fontMetrics.ascender * unit_to_mm;
+            const capheight_mm = fontMetrics.capHeight * unit_to_mm; 
+            const xheight_mm = fontMetrics.xHeight * unit_to_mm;
+            const descender_mm = fontMetrics.descender * unit_to_mm;
+            
+            const line_ascender_stop = h_top_pad;
+            const line_cap_height_stop = h_top_pad + (ascender_mm - capheight_mm);
+            const line_x_height_stop = h_top_pad + (ascender_mm - xheight_mm);
+            const line_baseline_stop = h_top_pad + ascender_mm;
+            const line_descender_stop = h_top_pad + ascender_mm + descender_mm;
+            const total_height = line_descender_stop + h_bottom_pad;
+
+            const hideAsc = metricVisibility.ascender ? '' : 'hidden';
+            const hideCap = metricVisibility.capHeight ? '' : 'hidden';
+            const hideX = metricVisibility.xHeight ? '' : 'hidden';
+            const hideBase = metricVisibility.baseline ? '' : 'hidden';
+            const hideDesc = metricVisibility.descender ? '' : 'hidden';
+
+            data.forEach((row, dataIndex) => {
+                // گرفتن مقادیر خام برای پردازش‌های جاوااسکریپتی
+                const rawBaseChar = row['نام گلیف'] || 'نامشخص';
+                const rawNoteText = row['یادداشت'] || '';
+                
+                // خنثی‌سازی (Escape) برای تزریق امن به HTML
+                const baseChar = escapeHTML(rawBaseChar);
+                const noteText = escapeHTML(rawNoteText);
+                
+                // نام فرم‌ها و گلیف‌ها را در آبجکت نگه‌می‌داریم تا بعداً برای نمایش خنثی شوند
+                const forms = [
+                    { name: row['فرم منفرد_type'] || 'منفرد', glyph: row['فرم منفرد'], key: 'فرم منفرد' },
+                    { name: row['فرم ابتدایی_type'] || 'ابتدایی', glyph: row['فرم ابتدایی'], key: 'فرم ابتدایی' },
+                    { name: row['فرم میانی_type'] || 'میانی', glyph: row['فرم میانی'], key: 'فرم میانی' },
+                    { name: row['فرم انتهایی_type'] || 'انتهایی', glyph: row['فرم انتهایی'], key: 'فرم انتهایی' }
+                ];
+
+                forms.forEach(form => {
+                    if (form.glyph && form.glyph.trim() !== '-' && form.glyph.trim() !== '') {
+                        // ذخیره مقادیر کاملاً خام در نقشه تا سایر توابع (مثل مدال‌ها و خروجی SVG) درست کار کنند
+                        window.glyphBoxDataMap[boxIndexCounter] = { row: row, form: form };
+
+                        const escapedGlyph = escapeHTML(form.glyph);
+                        const escapedFormName = escapeHTML(form.name);
+
+                        const lblAsc = isFirstRow ? `<span class="line-label">Ascender (${fontMetrics.ascender})</span>` : '';
+                        const lblCap = isFirstRow ? `<span class="line-label">Cap Height (${fontMetrics.capHeight})</span>` : ''; 
+                        const lblX = isFirstRow ? `<span class="line-label">x-Height (${fontMetrics.xHeight})</span>` : '';
+                        const lblBase = isFirstRow ? `<span class="line-label">Baseline (0)</span>` : '';
+                        const lblDesc = isFirstRow ? `<span class="line-label">Descender (-${fontMetrics.descender})</span>` : '';
+                        const noteHtml = noteText && noteText.trim() !== '-' ? `<div class="glyph-note">${noteText}</div>` : '';
+
+                        let advanceWidthHtml = '';
+                        const checkFont = parsedFont || defaultParsedFont; 
+                        
+                        // پردازش‌های OpenType با مقدار خام فرم (form.glyph)
+                        if (checkFont) {
+                            try {
+                                const glyphs = checkFont.stringToGlyphs(form.glyph);
+                                let totalAdvanceWidth = 0;
+                                glyphs.forEach(g => totalAdvanceWidth += (g.advanceWidth || 0));
+                                
+                                if (totalAdvanceWidth > 0) {
+                                    const physicalWidthMm = totalAdvanceWidth * unit_to_mm;
+                                    const tickY = line_baseline_stop;
+                                    advanceWidthHtml = `
+                                        <div class="advance-tick" style="left: calc(50% - ${physicalWidthMm / 2}mm); top: ${tickY}mm;" title="شروع گلیف"></div>
+                                        <div class="advance-tick" style="left: calc(50% + ${physicalWidthMm / 2}mm); top: ${tickY}mm;" title="پایان گلیف"></div>
+                                    `;
+                                }
+                            } catch(e) { }
+                        }
+
+                        const exportIconOverlay = `
+                            <div class="export-icon-overlay" title="دریافت فایل خروجی SVG دقیق">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
+                                </svg>
+                            </div>
+                        `;
+
+                        // فرم کلید همیشه رشته ثابت ماست (مثل "فرم منفرد") پس خطر XSS ندارد
+                        const deleteBtnHtml = `
+                            <button class="no-print absolute top-2 left-2 z-20 bg-rose-500/90 hover:bg-rose-600 text-white rounded p-1.5 opacity-0 group-hover:opacity-100 transition-all duration-200 shadow-sm flex items-center justify-center cursor-pointer scale-95 hover:scale-100" 
+                                    onclick="event.stopPropagation(); deleteGlyphRow(${dataIndex}, '${form.key}')" title="حذف این سطر از لیست">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+                            </button>
+                        `;
+
+                        const textKey = 'نمونه متن ' + form.key;
+                        const practiceText = row[textKey] || row['practice_text_' + form.key] || '';
+                        const isContinuousMode = practiceText ? 'continuous-mode' : '';
+                        
+                        let practiceTextHtml = '';
+                        if (practiceText) {
+                            
+                            const isLTR = /[a-zA-Z]/.test(practiceText);
+                            let kerningTicksHtml = '';
+
+                            // پردازش Kerning با رشته خام (practiceText)
+                            if (metricVisibility.kerning && checkFont) {
+                                try {
+                                    const glyphs = checkFont.stringToGlyphs(practiceText);
+                                    let currentPosMm = 0; 
+                                    
+                                    kerningTicksHtml += `<div class="kerning-tick" style="${isLTR ? 'left' : 'right'}: 0mm;" title="شروع"></div>`;
+
+                                    glyphs.forEach((glyph, index) => {
+                                        let advance = glyph.advanceWidth || 0;
+                                        let kerning = 0;
+                                        
+                                        if (index < glyphs.length - 1) {
+                                            if (isLTR) {
+                                                kerning = checkFont.getKerningValue(glyph, glyphs[index + 1]) || 0;
+                                            } else {
+                                                kerning = checkFont.getKerningValue(glyphs[index + 1], glyph) || 0;
+                                            }
+                                        }
+
+                                        const advanceMm = (advance + kerning) * unit_to_mm;
+                                        currentPosMm += advanceMm;
+
+                                        if (glyph.unicode !== 32) {
+                                            kerningTicksHtml += `
+                                                <div class="kerning-tick" 
+                                                    style="${isLTR ? 'left' : 'right'}: ${currentPosMm}mm;" 
+                                                    title="عرض: ${advance} | Kerning: ${kerning}">
+                                                </div>`;
+                                        }
+                                    });
+                                } catch (e) {
+                                    console.warn("Could not calculate kerning data", e);
+                                }
+                            }
+
+                            // ----------------------------------------------------
+                            // پردازش تفکیک رنگی حروف و اِعمال escapeHTML به صورت همزمان
+                            // ----------------------------------------------------
+                            let formattedPracticeText = '';
+                            let colorsEnabledClass = '';
+                            
+                            if (metricVisibility.charColors) {
+                                const chars = [...practiceText];
+                                let charIndexCounter = -1;
+                                
+                                const ignoreRegex = /[\u064B-\u065F\u0670\u200C\u200D\u0640]/;
+                                
+                                formattedPracticeText = chars.map((char) => {
+                                    if (char.trim() !== '' && !ignoreRegex.test(char)) {
+                                        charIndexCounter++;
+                                    }
+                                    const actualIndex = Math.max(0, charIndexCounter);
+                                    const colorClass = (actualIndex % 2 === 0) ? 'char-color-1' : 'char-color-2';
+                                    
+                                    // خنثی‌سازی هر کاراکتر در لحظه تزریق
+                                    return `<span class="${colorClass} transition-colors duration-200">${escapeHTML(char)}</span>`;
+                                }).join('');
+                                
+                                colorsEnabledClass = 'colors-enabled'; 
+                            } else {
+                                // خنثی‌سازی کل متن یک‌جا اگر رنگ‌ها غیرفعال باشند
+                                formattedPracticeText = escapeHTML(practiceText); 
+                            }
+
+                            practiceTextHtml = `
+                                <div class="practice-text-overlay ${colorsEnabledClass}" style="height: ${line_baseline_stop}mm; direction: ${isLTR ? 'ltr' : 'rtl'}; justify-content: flex-start;">
+                                    <div class="relative" style="margin-${isLTR ? 'left' : 'right'}: 3mm;">
+                                        <span class="practice-text-string">${formattedPracticeText}</span>
+                                        <div class="absolute inset-y-0" style="${isLTR ? 'left' : 'right'}: 0; width: 100%;">
+                                            ${kerningTicksHtml}
+                                        </div>
+                                    </div>
+                                </div>
+                            `;
+                        }
+
+                        const practiceHoverOverlay = `
+                            <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover/practice:opacity-100 transition-opacity duration-300 pointer-events-none z-20 no-print">
+                                <div class="bg-indigo-50/95 text-indigo-600 text-xs px-3 py-1.5 rounded-full shadow-sm flex items-center gap-1.5 border border-indigo-200 backdrop-blur-sm font-medium">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" /></svg>
+                                    تغییر کلمه تمرین
+                                </div>
+                            </div>
+                        `;
+
+                        // استفاده از مقادیر escaped (خنثی شده) برای تگ‌های HTML
+                        const rowHtml = `
+                            <div class="row-container group" style="height: ${total_height}mm;">
+                                ${deleteBtnHtml}
+                                <div class="meta-box" onclick="openGlyphModal(${boxIndexCounter})">
+                                    <div class="glyph-name">${baseChar}</div>
+                                    <div class="glyph-type">${escapedFormName}</div>
+                                    ${noteHtml}
+                                </div>
+
+                                <div class="h-line line-asc ${hideAsc}" style="top: ${line_ascender_stop}mm;">${lblAsc}</div>
+                                <div class="h-line line-cap ${hideCap}" style="top: ${line_cap_height_stop}mm;">${lblCap}</div>
+                                <div class="h-line line-x ${hideX}" style="top: ${line_x_height_stop}mm;">${lblX}</div>
+                                <div class="h-line line-base ${hideBase}" style="top: ${line_baseline_stop}mm;">${lblBase}</div>
+                                <div class="h-line line-desc ${hideDesc}" style="top: ${line_descender_stop}mm;">${lblDesc}</div>
+
+                                <div class="reference-box" onclick="openExportModal(${boxIndexCounter})" title="خروجی گرفتن از این گلیف">
+                                    ${exportIconOverlay}
+                                    <div class="glyph-baseline-container" style="height: ${line_baseline_stop}mm;">
+                                        <div class="glyph-display">${escapedGlyph}</div>
+                                    </div>
+                                    ${advanceWidthHtml}
+                                </div>
+                                
+                                <div class="practice-area ${isContinuousMode} group/practice" onclick="openPracticeModal(${boxIndexCounter})" title="ویرایش کلمه یا جمله تمرینی">
+                                    ${practiceHoverOverlay}
+                                    ${practiceTextHtml}
+                                    ${practiceColsHTML}
+                                </div>
+                            </div>
+                        `;
+                        
+                        allRowsHtml += rowHtml;
+                        boxIndexCounter++;
+                        isFirstRow = false;
+                    }
+                });
+            });
+            
+            container.innerHTML = allRowsHtml;
+            
+            // همگام‌سازی استایل‌های کاستوم روی المان‌های جدید
+            previewColorSettings();
+        }
+
+        window.onload = function() {
+            loadDefaultFont();
+            scanServerFontsFolder();
+            
+            // اعمال مقادیر اولیه روی رابط کاربری
+            document.getElementById('inpAlphaDefault').value = charColorSettings.alphaDefault;
+            previewColorSettings();
+            
+            currentData = defaultData;
+            renderWorkbook(currentData);
+        };
+    </script>
+</body>
+</html>

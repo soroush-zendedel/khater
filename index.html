@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>خطر (KhAter) | دفترچه مهندسی فونت فارسی</title>
+    
+    <!-- فونت وزیرمتن -->
+    <link href="./css/vazirmatn.css" rel="stylesheet" type="text/css" />
+    
+    <!-- Tailwind CSS (استفاده از CDN برای لندینگ پیج) -->
+    <script src="./js/tailwindcss.js"></script>
+    
+    <!-- تنظیمات سفارشی Tailwind برای هماهنگی با برند -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Vazirmatn', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            red: '#d91e18', // رنگ قرمز لوگو
+                            dark: '#0f172a', // Slate 900
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        html { scroll-behavior: smooth; }
+        body { font-family: 'Vazirmatn', sans-serif; }
+        .gradient-text {
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-image: linear-gradient(to left, #ef4444, #b91c1c);
+        }
+        .pattern-bg {
+            background-image: radial-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 antialiased overflow-x-hidden">
+
+    <!-- Navbar -->
+    <nav class="fixed w-full z-50 bg-slate-900/90 backdrop-blur-md border-b border-slate-800 transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <div class="flex items-center gap-3">
+                    <div class="w-12 h-12 bg-white rounded-xl p-1 flex items-center justify-center shadow-lg border border-slate-200">
+                        <!-- مسیر تصویر لوگو -->
+                        <img src="./img/khater.png" alt="لوگو خط‌ِر" class="w-full h-full object-contain" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSJjdXJyZW50Q29sb3IiIHN0cm9rZS13aWR0aD0iMiI+PHBhdGggc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIiBkPSJNMTIgMTlsOSAyLThtLTkgLTJsOS0ybTAtOWwzIDNMNyAybTEwIDUuNWwtOC04Ii8+PC9zdmc+'" />
+                    </div>
+                    <div>
+                        <span class="text-xl font-black text-white tracking-tight">خـــط‌ِر <span class="text-xs text-slate-400 font-normal tracking-normal hidden sm:inline-block">(KhAter)</span></span>
+                    </div>
+                </div>
+                
+                <div class="hidden md:flex items-center gap-8 text-sm font-medium text-slate-300">
+                    <a href="#features" class="hover:text-white transition-colors">امکانات</a>
+                    <a href="#how-it-works" class="hover:text-white transition-colors">نحوه کار</a>
+                    <a href="#open-source" class="hover:text-white transition-colors">متن‌باز</a>
+                </div>
+
+                <div>
+                    <a href="app.html" class="inline-flex items-center justify-center gap-2 bg-red-600 hover:bg-red-700 text-white px-6 py-2.5 rounded-lg font-bold shadow-lg shadow-red-900/20 transition-all transform hover:-translate-y-0.5">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" /></svg>
+                        ورود به نرم‌افزار
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="relative pt-32 pb-20 lg:pt-40 lg:pb-28 bg-brand-dark overflow-hidden">
+        <div class="absolute inset-0 pattern-bg opacity-30"></div>
+        <!-- Decorative Glow -->
+        <div class="absolute top-0 right-0 -mr-20 -mt-20 w-96 h-96 rounded-full bg-red-600/20 blur-3xl pointer-events-none"></div>
+        <div class="absolute bottom-0 left-0 -ml-20 -mb-20 w-96 h-96 rounded-full bg-indigo-600/20 blur-3xl pointer-events-none"></div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="grid lg:grid-cols-2 gap-12 items-center">
+                <!-- Text Content -->
+                <div class="text-center lg:text-right">
+                    <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-800/80 border border-slate-700 text-slate-300 text-xs font-bold mb-6">
+                        <span class="w-2 h-2 rounded-full bg-red-500 animate-pulse"></span>
+                        ابزار مهندسی تایپوگرافی
+                    </div>
+                    <h1 style="line-height:1.1;" class="text-4xl sm:text-5xl lg:text-6xl font-black text-white leading-tight mb-6">
+                        دفترچه مهندسی و<br>
+                        <span class="gradient-text">آنالیز دقیق فونت فارسی</span>
+                    </h1>
+                    <p class="text-lg text-slate-400 mb-8 max-w-2xl mx-auto lg:mx-0 leading-relaxed">
+                        خط‌ِر (KhAter) یک ابزار جامع برای طراحان تایپ است. متریک‌های فونت را با دقت ریاضی تنظیم کنید، فواصل (Kerning) را زنده بررسی کنید و برای طراحی اسکلت حروف، خروجی‌های استاندارد SVG و PDF بگیرید.
+                    </p>
+                    <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4">
+                        <a href="app.html" class="w-full sm:w-auto bg-white text-brand-dark hover:bg-slate-100 px-8 py-3.5 rounded-xl font-bold text-lg shadow-xl transition-all transform hover:-translate-y-1 flex items-center justify-center gap-2">
+                            شروع به کار
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 rotate-180" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd" /></svg>
+                        </a>
+                        <a href="#features" class="w-full sm:w-auto text-slate-300 hover:text-white bg-slate-800 hover:bg-slate-700 px-8 py-3.5 rounded-xl font-medium text-lg border border-slate-700 transition-all flex items-center justify-center">
+                            آشنایی بیشتر
+                        </a>
+                    </div>
+                    <div class="mt-8 text-slate-500 font-mono text-sm tracking-widest uppercase">
+                        Practice . Design . Create
+                    </div>
+                </div>
+
+                <!-- Hero Image / Concept -->
+                <div class="relative mx-auto w-full max-w-lg lg:max-w-full">
+                    <div class="absolute -inset-1 bg-gradient-to-r from-red-500 to-indigo-600 rounded-2xl blur opacity-30"></div>
+                    <div class="relative bg-white p-2 rounded-2xl shadow-2xl border border-slate-800 transform rotate-1 hover:rotate-0 transition-transform duration-500">
+                        <img src="./img/concept.png" alt="کانسپت خط‌ِر" class="rounded-xl w-full h-auto object-cover" onerror="this.src='https://placehold.co/800x600/0f172a/ffffff?text=Concept+Image'"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl font-black text-slate-900 mb-4">ابزاری ساخته شده برای <span class="text-red-600">دقت</span></h2>
+                <p class="text-slate-500 max-w-2xl mx-auto">تمام آنچه برای مهندسی پایه‌ای، بررسی اتصالات، و رسم راهنمای طراحی حروف (گلیف‌ها) نیاز دارید در یک پلتفرم تحت وب جمع‌آوری شده است.</p>
+            </div>
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Feature 1 -->
+                <div class="bg-slate-50 rounded-2xl p-8 border border-slate-100 shadow-sm hover:shadow-md transition-shadow">
+                    <div class="w-12 h-12 bg-indigo-100 text-indigo-600 rounded-xl flex items-center justify-center mb-6">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" /></svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-slate-900 mb-3">کنترل کامل متریک‌ها</h3>
+                    <p class="text-slate-600 text-sm leading-relaxed">
+                        مقادیر UPM، Ascender، Cap Height، x-Height و Descender را به صورت دقیق وارد کنید یا اجازه دهید سیستم به صورت خودکار از فایل فونت شما استخراج کند.
+                    </p>
+                </div>
+
+                <!-- Feature 2 -->
+                <div class="bg-slate-50 rounded-2xl p-8 border border-slate-100 shadow-sm hover:shadow-md transition-shadow">
+                    <div class="w-12 h-12 bg-emerald-100 text-emerald-600 rounded-xl flex items-center justify-center mb-6">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" /></svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-slate-900 mb-3">آنالیز Kerning و Advance Width</h3>
+                    <p class="text-slate-600 text-sm leading-relaxed">
+                        با استفاده از موتور قدرتمند OpenType.js، مقادیر دقیق فضای اشغالی هر حرف و فواصل تعبیه شده (Kerning) بین کلمات را به صورت بصری و عددی مشاهده کنید.
+                    </p>
+                </div>
+
+                <!-- Feature 3 -->
+                <div class="bg-slate-50 rounded-2xl p-8 border border-slate-100 shadow-sm hover:shadow-md transition-shadow">
+                    <div class="w-12 h-12 bg-red-100 text-red-600 rounded-xl flex items-center justify-center mb-6">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4-4m0 0l-4-4m4 4V4" /></svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-slate-900 mb-3">خروجی‌های مهندسی شده</h3>
+                    <p class="text-slate-600 text-sm leading-relaxed">
+                        تولید فایل‌های SVG و PNG با رزولوشن منطبق بر UPM برای طراحی دقیق گلیف‌ها، و همچنین تولید فایل PDF چند صفحه‌ای مناسب برای چاپ و تمرین دستی.
+                    </p>
+                </div>
+
+                <!-- Feature 4 -->
+                <div class="bg-slate-50 rounded-2xl p-8 border border-slate-100 shadow-sm hover:shadow-md transition-shadow">
+                    <div class="w-12 h-12 bg-amber-100 text-amber-600 rounded-xl flex items-center justify-center mb-6">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-slate-900 mb-3">مدیریت داده‌ها با اکسل</h3>
+                    <p class="text-slate-600 text-sm leading-relaxed">
+                        لیست کاراکترها، دسته‌بندی‌ها، نمونه متون و فرم‌های مختلف حروف را از طریق فایل Excel وارد برنامه کنید و پس از تغییر، مجدداً خروجی اکسل بگیرید.
+                    </p>
+                </div>
+
+                <!-- Feature 5 -->
+                <div class="bg-slate-50 rounded-2xl p-8 border border-slate-100 shadow-sm hover:shadow-md transition-shadow">
+                    <div class="w-12 h-12 bg-sky-100 text-sky-600 rounded-xl flex items-center justify-center mb-6">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01" /></svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-slate-900 mb-3">تفکیک رنگی متون تمرین</h3>
+                    <p class="text-slate-600 text-sm leading-relaxed">
+                        برای درک بهتر مرز بین حروف متصل، برنامه به صورت خودکار حروف زوج و فرد را در نمونه‌متن‌های تمرینی با رنگ‌ها و شفافیت متفاوت رندر می‌کند.
+                    </p>
+                </div>
+
+                <!-- Feature 6 -->
+                <div class="bg-slate-50 rounded-2xl p-8 border border-slate-100 shadow-sm hover:shadow-md transition-shadow">
+                    <div class="w-12 h-12 bg-fuchsia-100 text-fuchsia-600 rounded-xl flex items-center justify-center mb-6">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" /></svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-slate-900 mb-3">کاملاً تحت وب و سریع</h3>
+                    <p class="text-slate-600 text-sm leading-relaxed">
+                        نیاز به نصب هیچ نرم‌افزاری ندارید. تمام پردازش‌ها (حتی رندر فونت‌های کاستوم و خواندن اکسل) درون مرورگر شما و با امنیت کامل انجام می‌شود.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Showcase Section -->
+    <section id="how-it-works" class="py-20 bg-slate-50 border-t border-slate-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid lg:grid-cols-2 gap-12 items-center">
+                <div>
+                    <h2 class="text-3xl font-black text-slate-900 mb-6">خروجی‌های استاندارد برای تایپ‌دیزاینرها</h2>
+                    <p class="text-slate-600 mb-6 leading-relaxed">
+                        مرحله طراحی حروف نیازمند درک صحیحی از تناسبات (Proportions) است. «خط‌ِر» به شما این امکان را می‌دهد که با وارد کردن فونت‌های الگو یا در حال طراحی خود، راهنماهای طراحی (Guidelines) را دقیقاً بر اساس مشخصات فایل استخراج کنید.
+                    </p>
+                    <ul class="space-y-4 mb-8">
+                        <li class="flex items-start gap-3">
+                            <div class="mt-1 bg-red-100 text-red-600 rounded-full p-1"><svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg></div>
+                            <span class="text-slate-700">تولید <strong>PDFهای خط‌کشی شده</strong> برای تمرین کالیگرافی و طراحی دستی.</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <div class="mt-1 bg-red-100 text-red-600 rounded-full p-1"><svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg></div>
+                            <span class="text-slate-700">تولید <strong>SVGهای مهندسی شده</strong> قابل ایمپورت مستقیم در نرم‌افزارهایی مثل Glyphs, FontForge و FontLab.</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <div class="mt-1 bg-red-100 text-red-600 rounded-full p-1"><svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg></div>
+                            <span class="text-slate-700">مدیریت آسان فرم‌های ابتدا، وسط و انتهای حروف عربی/فارسی.</span>
+                        </li>
+                    </ul>
+                    <a href="app.html" class="inline-flex text-red-600 font-bold hover:text-red-700 items-center gap-2 group">
+                        همین الان امتحان کنید
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 transform group-hover:-translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>
+                    </a>
+                </div>
+                
+                <div class="relative">
+                    <!-- تصویر خروجی سیستم (آدرس‌دهی به تصاویر ارسالی شما) -->
+                    <div class="bg-white rounded-xl shadow-xl p-2 border border-slate-200 transform -rotate-2 hover:rotate-0 transition-transform duration-300">
+                        <img src="./img/glyph.png" alt="نمونه خروجی سیستم" class="rounded-lg w-full h-auto border border-slate-100" onerror="this.src='https://placehold.co/600x800/f8fafc/94a3b8?text=SVG+Export+Sample'"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Print/PDF Export Section -->
+    <section class="py-24 bg-white border-t border-slate-200 overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid lg:grid-cols-2 gap-16 items-center">
+                
+                <!-- Image Side -->
+                <div class="relative order-2 lg:order-1 group">
+                    <!-- Background Decorations -->
+                    <div class="absolute -inset-4 bg-gradient-to-tr from-slate-200 to-slate-100 rounded-[2rem] transform rotate-3 transition-transform duration-500 group-hover:rotate-6"></div>
+                    <div class="absolute -inset-4 bg-gradient-to-bl from-slate-100 to-slate-200 rounded-[2rem] transform -rotate-2 transition-transform duration-500 group-hover:-rotate-4 opacity-70"></div>
+                    
+                    <!-- Main Image Container -->
+                    <div class="relative bg-white rounded-2xl shadow-2xl p-3 border border-slate-200 transition-all duration-500 transform group-hover:-translate-y-2 group-hover:shadow-3xl z-10">
+                        <img src="./img/export.png" alt="خروجی دفترچه تمرین فونت" class="rounded-xl w-full h-auto border border-slate-100/50 shadow-sm object-cover" onerror="this.src='https://placehold.co/800x1000/f8fafc/94a3b8?text=PDF+Export+Sample'"/>
+                        
+                        <!-- Floating Badges -->
+                        <div class="absolute -bottom-5 -left-5 bg-red-600 text-white text-sm font-bold px-5 py-2.5 rounded-xl shadow-lg shadow-red-900/20 transform -rotate-3 border-2 border-white">
+                            مناسب برای چاپ فیزیکی
+                        </div>
+                        <div class="absolute -top-4 -right-4 bg-slate-900 text-white text-xs font-bold px-4 py-2 rounded-lg shadow-xl transform rotate-6">
+                            PDF / A4
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Text Side -->
+                <div class="order-1 lg:order-2 lg:pr-10 relative z-20">
+                    <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-red-50 border border-red-100 text-red-600 text-xs font-bold mb-6">
+                        <span class="w-2 h-2 rounded-full bg-red-500 animate-pulse"></span>
+                        خروجی‌های کاربردی
+                    </div>
+                    
+                    <!-- عناوین هماهنگ با تصویر -->
+                    <h2 class="text-3xl sm:text-4xl font-black text-slate-900 mb-3 leading-tight">دفترچه تمرین و<br>مهندسی فونت فارسی</h2>
+                    <p class="text-xl text-red-600 font-bold mb-6 flex items-center gap-2">
+                        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
+                        بر اساس تناسبات استاندارد تایپوگرافی
+                    </p>
+                    
+                    <p class="text-slate-600 mb-10 leading-relaxed text-lg">
+                        خروجی‌های «خط‌ِر» تنها به محیط دیجیتال محدود نمی‌شوند. با یک کلیک می‌توانید تمام کاراکترها و نمونه متون خود را در قالب صفحات استاندارد، همراه با خط‌کشی‌های دقیق و تفکیک رنگی استخراج کنید که برای پرینت و تمرین دستی کالیگرافی ایده‌آل است.
+                    </p>
+                    
+                    <ul class="space-y-6 mb-8">
+                        <!-- ویژگی اول: خطوط راهنما -->
+                        <li class="flex items-start gap-4">
+                            <div class="mt-1 flex-shrink-0 bg-red-50 text-red-600 rounded-xl p-2.5 shadow-sm border border-red-100 transition-colors hover:bg-red-600 hover:text-white">
+                                <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"></path></svg>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-slate-900 text-lg">ترسیم دقیق خطوط پنج‌گانه</h4>
+                                <p class="text-sm text-slate-500 mt-1.5 leading-relaxed">خطوط راهنمای Ascender تا Descender با ضخامت‌ها و رنگ‌های متفاوت (نقطه‌چین و خط‌چین) دقیقاً بر اساس متریک‌های استخراج‌شده از فونت شما رسم می‌شوند.</p>
+                            </div>
+                        </li>
+                        
+                        <!-- ویژگی دوم: فرم‌ها و اتصالات -->
+                        <li class="flex items-start gap-4">
+                            <div class="mt-1 flex-shrink-0 bg-red-50 text-red-600 rounded-xl p-2.5 shadow-sm border border-red-100 transition-colors hover:bg-red-600 hover:text-white">
+                                <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z"></path></svg>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-slate-900 text-lg">آنالیز فرم‌ها و اتصالات (کرنینگ)</h4>
+                                <p class="text-sm text-slate-500 mt-1.5 leading-relaxed">نمایش اطلاعات تخصصی هر گلیف اعم از نام، یونیکد، حالت (منفرد، انتهایی، و...) و استایل‌های متصل در قالب جدول‌بندی استاندارد.</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer id="open-source" class="bg-brand-dark pt-16 pb-8 border-t border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid md:grid-cols-2 gap-8 items-center mb-12">
+                <div>
+                    <div class="flex items-center gap-2 mb-4">
+                        <div class="w-8 h-8 bg-white rounded p-0.5">
+                            <img src="./img/khater.png" alt="لوگو" class="w-full h-full object-contain" onerror="this.style.display='none'"/>
+                        </div>
+                        <span class="text-xl font-black text-white">خط‌ِر <span class="text-sm font-normal text-slate-400">| KhAter</span></span>
+                    </div>
+                    <p class="text-slate-400 text-sm max-w-md leading-relaxed">
+                        یک ابزار متن‌باز برای ارتقای سطح مهندسی تایپ‌فیس‌های فارسی .معتقدم ابزارهای بهتر منجر به خلق تایپ‌فیس‌های خواناتر و زیباتر می‌شوند.
+                    </p>
+                </div>
+                <div class="md:text-left flex flex-col md:items-end gap-2 text-slate-300 text-sm">
+                    <p>طراح و توسعه‌دهنده: <strong>سروش زنده‌دل</strong></p>
+                    <a href="mailto:Soroush_zendedel@live.com" class="hover:text-white transition-colors font-mono">Soroush_zendedel@live.com</a>
+                    <!-- لینک گیت‌هاب شما می‌تواند اینجا قرار بگیرد -->
+                    <a href="#" class="inline-flex items-center gap-2 mt-2 bg-slate-800 hover:bg-slate-700 px-4 py-2 rounded-lg transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+                        ستاره دادن در گیت‌هاب
+                    </a>
+                </div>
+            </div>
+            <div class="border-t border-slate-800 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-slate-500">
+                <p>&copy; 2026 Soroush Zendedel. تمامی حقوق محفوظ است.</p>
+                <p class="flex items-center gap-2">
+                    <span class="bg-slate-800 px-2 py-1 rounded text-slate-400 font-bold">لایسنس CC BY-NC 4.0</span>
+                    استفاده غیرتجاری آزاد است.
+                </p>
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>
