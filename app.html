@@ -3,19 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>دفترچه مهندسی فونت فارسی</title>
+    <meta name="description" content="ساخت و مدیریت دفترچه تمرین فونت فارسی، تنظیم متریک‌ها، بررسی گلیف‌ها و دریافت خروجی‌های مهندسی SVG، PNG و PDF.">
+    <link rel="canonical" href="https://soroush-zendedel.github.io/khater/app.html">
+    <meta name="theme-color" content="#0f172a">
+    <link rel="icon" type="image/png" sizes="32x32" href="./favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="./favicon/favicon-16x16.png">
+    <title>برنامه دفترچه فونت فارسی | خط‌ِر (KhAter)</title>
     
     <!-- فونت وزیرمتن برای رابط کاربری -->
     <link href="./css/vazirmatn.css" rel="stylesheet" type="text/css" />
     <!-- Tailwind CSS برای استایل‌دهی سریع -->
-    <script src="./js/tailwindcss.js"></script>
     <link href="./css/app.css" rel="stylesheet" type="text/css" />
-    
-    <!-- کتابخانه SheetJS برای خواندن فایل اکسل در مرورگر -->
-    <script src="./js/xlsx.full.min.js"></script>
-
-    <!-- اضافه شدن کتابخانه OpenType.js برای استخراج اطلاعات دقیق فونت -->
-    <script src="./js/opentype.min.js"></script>
+    <link href="./css/print.css" rel="stylesheet" type="text/css" media="print" />
 </head>
 <body class="flex flex-col items-center pb-20 relative min-h-screen">
 
@@ -412,12 +411,6 @@
         </div>
     </div>
 
-    <script src="./js/app/00-state.js"></script>
-    <script src="./js/app/01-ui-settings.js"></script>
-    <script src="./js/app/02-glyph-editor.js"></script>
-    <script src="./js/app/03-export.js"></script>
-    <script src="./js/app/04-font-metrics.js"></script>
-    <script src="./js/app/05-workbook.js"></script>
-    <script src="./js/app/06-bootstrap.js"></script>
+    <script type="module" src="./src/main.js"></script>
 </body>
 </html>

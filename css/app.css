@@ -28,45 +28,6 @@
             print-color-adjust: exact;
         }
 
-        /* ---------------------------------------------------- */
-        /* استایل‌های حیاتی برای پرینت بومی (Vector Print)      */
-        /* ---------------------------------------------------- */
-        @page {
-            size: A4 portrait;
-            /* مارجین استاندارد کاغذ. این باعث می‌شود بین تمام صفحات فاصله بیفتد */
-            margin: 15mm; 
-        }
-
-        @media print {
-            body { 
-                background-color: #fff; 
-                margin: 0;
-                padding: 0;
-            }
-            .no-print { display: none !important; }
-            
-            #pdf-content {
-                box-shadow: none !important;
-                margin: 0 !important;
-                padding: 0 !important;
-                width: 100% !important;
-                max-width: 100%;
-            }
-            
-            .row-container {
-                page-break-inside: avoid !important;
-                break-inside: avoid !important;
-                margin-bottom: 8mm !important;
-            }
-            
-            .header-banner-print {
-                margin-bottom: 15mm !important;
-            }
-            /* جلوگیری از چاپ شدن مودال */
-            #glyphModal, #exportModal, #practiceModal, #colorSettingsModal { display: none !important; }
-        }
-        /* ---------------------------------------------------- */
-
         #pdf-content {
             background: white;
             margin: 0 auto;

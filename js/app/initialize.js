@@ -1,4 +1,4 @@
-        window.onload = function() {
+        function initializeApp() {
             loadDefaultFont();
             scanServerFontsFolder();
             
@@ -8,4 +8,10 @@
             
             currentData = defaultData;
             renderWorkbook(currentData);
-        };
+        }
+
+        if (document.readyState === 'complete') {
+            initializeApp();
+        } else {
+            window.addEventListener('load', initializeApp, { once: true });
+        }
