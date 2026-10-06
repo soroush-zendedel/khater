@@ -1,0 +1,12 @@
+        html { scroll-behavior: smooth; }
+        body { font-family: 'Vazirmatn', sans-serif; }
+        .gradient-text {
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-image: linear-gradient(to left, #ef4444, #b91c1c);
+        }
+        .pattern-bg {
+            background-image: radial-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px);
+            background-size: 20px 20px;
+        }

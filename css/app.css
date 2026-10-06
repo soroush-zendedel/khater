@@ -1,0 +1,409 @@
+        :root {
+            --font-size-pt: 44pt;
+            --h-top-pad: 5mm;
+            --h-bottom-pad: 5mm;
+            /* متغیر فونت کاستوم - به صورت پیش‌فرض وزیرمتن است */
+            --custom-font: 'Vazirmatn';
+            
+            /* متغیرهای پایه برای رنگ و شفافیت جهت سازگاری با حالت‌های رنگی و چاپ */
+            --c1-r: 15; --c1-g: 23; --c1-b: 42;
+            --c2-r: 15; --c2-g: 23; --c2-b: 42;
+            
+            --alpha-1: 0.35;
+            --alpha-2: 0.08;
+            --alpha-default: 0.18;
+            
+            /* رنگ‌های نهایی ترکیب شده (توسط جاوااسکریپت و مودال آپدیت می‌شوند) */
+            --char-c1: rgba(var(--c1-r), var(--c1-g), var(--c1-b), var(--alpha-1));
+            --char-c2: rgba(var(--c2-r), var(--c2-g), var(--c2-b), var(--alpha-2));
+        }
+
+        body {
+            font-family: 'Vazirmatn', Tahoma, sans-serif;
+            background-color: #f3f4f6;
+            margin: 0;
+            padding: 0;
+            /* اجبار مرورگر به چاپ دقیق رنگ‌ها و بک‌گراندها */
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+        }
+
+        /* ---------------------------------------------------- */
+        /* استایل‌های حیاتی برای پرینت بومی (Vector Print)      */
+        /* ---------------------------------------------------- */
+        @page {
+            size: A4 portrait;
+            /* مارجین استاندارد کاغذ. این باعث می‌شود بین تمام صفحات فاصله بیفتد */
+            margin: 15mm; 
+        }
+
+        @media print {
+            body { 
+                background-color: #fff; 
+                margin: 0;
+                padding: 0;
+            }
+            .no-print { display: none !important; }
+            
+            #pdf-content {
+                box-shadow: none !important;
+                margin: 0 !important;
+                padding: 0 !important;
+                width: 100% !important;
+                max-width: 100%;
+            }
+            
+            .row-container {
+                page-break-inside: avoid !important;
+                break-inside: avoid !important;
+                margin-bottom: 8mm !important;
+            }
+            
+            .header-banner-print {
+                margin-bottom: 15mm !important;
+            }
+            /* جلوگیری از چاپ شدن مودال */
+            #glyphModal, #exportModal, #practiceModal, #colorSettingsModal { display: none !important; }
+        }
+        /* ---------------------------------------------------- */
+
+        #pdf-content {
+            background: white;
+            margin: 0 auto;
+            width: 210mm; 
+            min-height: 297mm; 
+            padding: 20mm 15mm;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .row-container {
+            position: relative;
+            width: 100%;
+            margin-bottom: 8mm;
+            border: 1px solid #dcdde1;
+            background-color: #fff;
+            border-radius: 4px;
+            overflow: hidden;
+            box-sizing: border-box;
+            page-break-inside: avoid;
+            transition: all 0.3s ease;
+        }
+        
+        .meta-box {
+            position: absolute;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            width: 30mm;
+            background-color: #fdfdfd;
+            border-left: 1px solid #dcdde1;
+            z-index: 20;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            transition: background-color 0.2s ease, box-shadow 0.2s ease, border-color 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .meta-box:hover {
+            background-color: #f1f5f9;
+            box-shadow: inset 0 0 8px rgba(0,0,0,0.03);
+        }
+        
+        .glyph-name { font-size: 9pt; font-weight: bold; color: #2c3e50; margin-bottom: 2mm; pointer-events: none; transition: color 0.3s ease;}
+        .glyph-type { font-size: 7pt; color: #7f8c8d; background: #ecf0f1; padding: 2px 6px; border-radius: 12px; border: 1px solid #dcdde1; pointer-events: none; transition: all 0.3s ease;}
+        
+        .glyph-note { 
+            font-size: 6pt; color: #7f8c8d; margin-top: 2mm; padding-top: 2mm; border-top: 1px dotted #dcdde1; 
+            width: 80%; pointer-events: none;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            padding-left: 2px;
+            padding-right: 2px;
+            transition: all 0.3s ease;
+        }
+        
+        .h-line { position: absolute; right: 30mm; left: 0; z-index: 5; transition: all 0.3s ease;}
+        
+        .line-asc { border-top: 1px dashed #b2bec3; }
+        .line-cap { border-top: 1px dashed #ffa502; opacity: 0.75; } 
+        .line-x { border-top: 1px solid #74b9ff; opacity: 0.7; }
+        .line-base { border-top: 1.5px solid #2d3436; }
+        .line-desc { border-top: 1px dashed #ff7675; opacity: 0.8; }
+        
+        .line-label {
+            position: absolute; left: 3mm; bottom: -0.5mm;
+            font-size: 6pt; color: #b2bec3; direction: ltr; font-family: monospace;
+            transition: color 0.3s ease;
+            padding: 0 2px;
+        }
+
+        .line-cap .line-label { color: #b2bec3; }
+
+        .reference-box {
+            position: absolute; right: 30mm; top: 0; bottom: 0; width: 25mm;
+            border-left: 2px solid #bdc3c7; z-index: 10; 
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .reference-box:hover {
+            background-color: rgba(99, 102, 241, 0.05);
+        }
+        
+        .reference-box:hover .glyph-display {
+            color: #4f46e5;
+            transform: scale(1.05);
+            transition: all 0.2s ease;
+        }
+
+        .export-icon-overlay {
+            position: absolute;
+            top: 2mm; left: 2mm;
+            opacity: 0;
+            color: #4f46e5;
+            transition: opacity 0.2s ease;
+            z-index: 60;
+            pointer-events: none;
+        }
+        .reference-box:hover .export-icon-overlay {
+            opacity: 1;
+        }
+        
+        .glyph-baseline-container {
+            position: absolute; top: 0; left: 0; right: 0;
+            display: flex;
+            align-items: baseline;
+            justify-content: center;
+            z-index: 50; 
+            pointer-events: none;
+        }
+        
+        .glyph-baseline-container::after {
+            content: '';
+            display: inline-block;
+            height: 100%;
+            width: 0;
+            z-index: 50;
+        }
+        
+        .glyph-display {
+            font-size: var(--font-size-pt);
+            color: #2d3436;
+            font-family: var(--custom-font), 'Vazirmatn', Tahoma, sans-serif;
+            position: relative;
+            z-index: 50;
+            transition: all 0.2s ease;
+        }
+
+        .advance-tick {
+            position: absolute;
+            width: 1px;
+            height: 8px;
+            background-color: #8e44ad;
+            z-index: 15;
+            transition: all 0.3s ease;
+            transform: translateY(-50%);
+        }
+
+        .kerning-tick {
+            position: absolute;
+            width: 1.5px;
+            height: 15px;
+            background-color: #e11d48;
+            z-index: 15;
+            transition: all 0.3s ease;
+            transform: translateY(50%);
+            bottom: 0; 
+            opacity: 0.9;
+        }
+        
+        /* ---------------------------------------------------- */
+        /* استایل‌های ناحیه تمرین و نوشتار پیوسته                 */
+        /* ---------------------------------------------------- */
+        .practice-area {
+            position: absolute; right: 55mm; top: 0; bottom: 0; left: 0; z-index: 1; 
+            display: flex;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+
+        .practice-area:hover {
+            background-color: rgba(99, 102, 241, 0.015);
+        }
+        
+        .practice-col {
+            height: 100%; width: 25mm; 
+            border-left: 1px solid #cbd5e1; 
+            position: relative;
+            transition: border-color 0.3s ease;
+        }
+        
+        .micro-grid { 
+            position: absolute; top: 0; bottom: 0; width: 0; 
+            border-right: 1px dotted #e2e8f0; 
+            z-index: 0; 
+            transition: border-color 0.3s ease;
+        }
+
+        .practice-area.continuous-mode .practice-col {
+            border-left-color: transparent !important;
+        }
+        .practice-area.continuous-mode .micro-grid {
+            border-right-color: transparent !important;
+        }
+
+        .practice-text-overlay {
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            display: flex;
+            align-items: baseline;
+            z-index: 10;
+            pointer-events: none;
+            /* استفاده از متغیر آلفای پیش‌فرض که قابل تنظیم است */
+            opacity: var(--alpha-default); 
+            white-space: nowrap;
+        }
+
+        .practice-text-overlay.colors-enabled {
+            opacity: 1 !important;
+        }
+
+        .practice-text-overlay::after {
+            content: '';
+            display: inline-block;
+            height: 100%;
+            width: 0;
+        }
+
+        .practice-text-string {
+            font-size: var(--font-size-pt);
+            font-family: var(--custom-font), 'Vazirmatn', Tahoma, sans-serif;
+            color: #0f172a;
+        }
+
+        .char-color-1 {
+            color: var(--char-c1); 
+        }
+        .char-color-2 {
+            color: var(--char-c2); 
+        }
+
+        /* ---------------------------------------------------- */
+        /* استایل‌های حالت چاپ سیاه و سفید                      */
+        /* ---------------------------------------------------- */
+        .bw-mode .row-container { border-color: #333; }
+        .bw-mode .meta-box { border-left-color: #333; background-color: #fff; }
+        .bw-mode .meta-box:hover { background-color: #f9f9f9; }
+        .bw-mode .glyph-name { color: #000; }
+        .bw-mode .glyph-type { background: #fff; border-color: #333; color: #000; font-weight: bold;}
+        .bw-mode .glyph-note { color: #333; border-top-color: #888; }
+        .bw-mode .line-asc { border-top: 1px dashed #555; opacity: 1; }
+        .bw-mode .line-cap { border-top: 1.5px dashed #444; opacity: 1; } 
+        .bw-mode .line-cap .line-label { color: #000; }
+        .bw-mode .line-x { border-top: 2px dotted #000; opacity: 1; }
+        .bw-mode .line-base { border-top: 2px solid #000; opacity: 1; }
+        .bw-mode .line-desc { border-top: 1px dashed #777; opacity: 1; }
+        .bw-mode .line-label { color: #000; font-weight: bold; font-size: 6.5pt;}
+        .bw-mode .reference-box { border-left-color: #555; }
+        .bw-mode .practice-col { border-left: 1px solid #bbb; } 
+        .bw-mode .micro-grid { border-right: 1px dotted #e5e5e5; } 
+        .bw-mode .advance-tick { background-color: #000; width: 1px; height: 10px; }
+        .bw-mode .kerning-tick { background-color: #555; }
+        
+        /* در چاپ سیاه و سفید فقط مقادیر RGB را به مشکی تغییر می‌دهیم اما آلفا (شفافیت) حفظ می‌شود */
+        .bw-mode {
+            --c1-r: 0; --c1-g: 0; --c1-b: 0;
+            --c2-r: 0; --c2-g: 0; --c2-b: 0;
+        }
+        
+        .bw-mode .practice-text-string { color: #000 !important; }
+        .bw-mode .practice-text-overlay.colors-enabled { opacity: 1 !important; }
+
+        .bw-mode #print-footer { border-top-color: #ddd; }
+        .bw-mode #print-footer, .bw-mode #print-footer * { color: #666 !important; }
+        .bw-mode #print-footer .license-badge { border: 1px solid #ccc; background: transparent !important; }
+        /* ---------------------------------------------------- */
+
+        #messageBox {
+            transition: opacity 0.3s ease, transform 0.3s ease;
+            transform: translateY(20px);
+        }
+        #messageBox.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .modal-blur {
+            backdrop-filter: blur(4px);
+        }
+
+        .checkered-bg {
+            background-color: #ffffff;
+            background-image: 
+                linear-gradient(45deg, #f0f0f0 25%, transparent 25%, transparent 75%, #f0f0f0 75%, #f0f0f0),
+                linear-gradient(45deg, #f0f0f0 25%, transparent 25%, transparent 75%, #f0f0f0 75%, #f0f0f0);
+            background-size: 20px 20px;
+            background-position: 0 0, 10px 10px;
+        }
+
+        #svgPreviewWrapper {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        #svgPreviewWrapper svg {
+            max-width: 100%;
+            max-height: 100%;
+            width: auto;
+            height: auto;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.15), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+            background-color: white;
+            border: 1px solid #cbd5e1;
+            display: block; 
+        }
+
+        .premium-chk {
+            width: 14px;
+            height: 14px;
+            accent-color: #6366f1;
+            cursor: pointer;
+        }
+
+        select::-webkit-scrollbar {
+            width: 8px;
+        }
+        select::-webkit-scrollbar-track {
+            background: #1e293b;
+        }
+        select::-webkit-scrollbar-thumb {
+            background: #475569;
+            border-radius: 4px;
+        }
+
+        input[type=range] {
+            -webkit-appearance: none;
+            width: 100%;
+            background: transparent;
+        }
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            height: 16px; width: 16px;
+            border-radius: 50%;
+            background: #4f46e5;
+            cursor: pointer;
+            margin-top: -6px;
+        }
+        input[type=range]::-webkit-slider-runnable-track {
+            width: 100%; height: 4px;
+            cursor: pointer;
+            background: #cbd5e1;
+            border-radius: 2px;
+        }
