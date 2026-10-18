@@ -1,7 +1,6 @@
 import { loadClassicScripts } from './script-loader.js';
 
 const compatibilityScripts = [
-  '../js/tailwindcss.js',
   '../js/xlsx.full.min.js',
   '../js/opentype.min.js',
   '../js/app/state.js',

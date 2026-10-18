@@ -1,9 +1,12 @@
-import { loadClassicScripts } from './script-loader.js';
-
-const tailwindUrl = new URL('../js/tailwindcss.js', import.meta.url).href;
-await loadClassicScripts([tailwindUrl]);
-
-window.tailwind.config = {
+module.exports = {
+  content: [
+    './index.html',
+    './about.html',
+    './app.html',
+    './en/**/*.html',
+    './src/**/*.js',
+    './js/app/**/*.js',
+  ],
   theme: {
     extend: {
       fontFamily: {
@@ -17,4 +20,5 @@ window.tailwind.config = {
       },
     },
   },
+  plugins: [],
 };
