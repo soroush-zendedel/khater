@@ -11,13 +11,18 @@ function copyRuntimeData() {
     writeBundle(outputOptions) {
       const outputDirectory = outputOptions.dir ?? resolve(projectRoot, 'dist');
       const runtimeDirectories = ['fonts', 'js'];
-      const runtimeFiles = ['Persian_Font_Design_Workbook.xlsx'];
+      const runtimeFiles = ['Persian_Font_Design_Workbook.xlsx', 'sitemap.xml', 'robots.txt'];
 
       for (const directory of runtimeDirectories) {
         cpSync(resolve(projectRoot, directory), resolve(outputDirectory, directory), {
           recursive: true,
         });
       }
+
+      cpSync(resolve(projectRoot, 'favicon'), resolve(outputDirectory, 'favicon'), {
+        recursive: true,
+        filter: (source) => source !== resolve(projectRoot, 'favicon', 'site.webmanifest'),
+      });
 
       mkdirSync(outputDirectory, { recursive: true });
       for (const file of runtimeFiles) {
@@ -34,6 +39,9 @@ export default defineConfig({
     rollupOptions: {
       input: {
         landing: resolve(projectRoot, 'index.html'),
+        about: resolve(projectRoot, 'about.html'),
+        englishLanding: resolve(projectRoot, 'en/index.html'),
+        englishAbout: resolve(projectRoot, 'en/about.html'),
         app: resolve(projectRoot, 'app.html'),
       },
     },

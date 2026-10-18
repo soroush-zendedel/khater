@@ -1,0 +1,26 @@
+services:
+  khater:
+    build:
+      context: .
+      target: runtime
+    ports:
+      - "${KHATER_PORT:-8080}:80"
+    restart: unless-stopped
+
+  khater-dev:
+    image: node:22-alpine
+    profiles: ["dev"]
+    working_dir: /app
+    command: >-
+      sh -c "corepack enable && pnpm install --frozen-lockfile && pnpm dev --host 0.0.0.0"
+    environment:
+      CHOKIDAR_USEPOLLING: "true"
+    volumes:
+      - .:/app
+      - khater_node_modules:/app/node_modules
+    ports:
+      - "${KHATER_DEV_PORT:-5173}:5173"
+    init: true
+
+volumes:
+  khater_node_modules:

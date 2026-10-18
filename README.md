@@ -38,7 +38,7 @@ pnpm install
 pnpm dev
 ```
 
-Vite آدرس محلی را در ترمینال نشان می‌دهد؛ صفحه معرفی از `/` و برنامه از `/app.html` در دسترس است. چون پروژه از ES Modules استفاده می‌کند، فایل‌های HTML را مستقیم با `file://` باز نکنید.
+Vite آدرس محلی را در ترمینال نشان می‌دهد؛ لندینگ فارسی از `/`، لندینگ انگلیسی از `/en/`، صفحه‌های معرفی محصول از `/about.html` و `/en/about.html` و برنامه از `/app.html` در دسترس هستند. چون پروژه از ES Modules استفاده می‌کند، فایل‌های HTML را مستقیم با `file://` باز نکنید.
 
 برای ساخت نسخه‌ی قابل انتشار و پیش‌نمایش آن:
 
@@ -48,6 +48,35 @@ pnpm preview
 ```
 
 خروجی ساخت در پوشه‌ی `dist/` قرار می‌گیرد.
+
+### انتشار در GitHub Pages
+
+Workflow فایل `.github/workflows/pages.yml` با هر push به شاخه‌ی `main` سایت را build و در GitHub Pages منتشر می‌کند؛ اجرای دستی آن نیز از تب Actions ممکن است. برای فعال‌سازی اولیه، در مخزن GitHub به **Settings → Pages → Build and deployment → Source** بروید و **GitHub Actions** را انتخاب کنید. آدرس پروژه پس از انتشار `https://soroush-zendedel.github.io/khater/` خواهد بود.
+
+### اجرا با Docker Compose
+
+برای دیدن نسخه‌ی production، در پوشه‌ی پروژه اجرا کنید:
+
+```bash
+docker compose up --build -d
+```
+
+سپس `http://localhost:8080` را باز کنید. این سرویس با Nginx فایل‌های production ساخته‌شده را ارائه می‌کند. برای دیدن گزارش سرویس یا خاموش‌کردن آن:
+
+```bash
+docker compose logs -f khater
+docker compose down
+```
+
+برای ادامه‌ی توسعه با Vite و مشاهده‌ی تغییرات فایل‌ها بدون build مجدد، پروفایل توسعه را اجرا کنید:
+
+```bash
+docker compose --profile dev up -d khater-dev
+```
+
+برنامه‌ی توسعه در `http://localhost:5173` در دسترس است و فایل‌های پروژه از پوشه‌ی محلی خوانده می‌شوند. برای دیدن گزارش توسعه از `docker compose --profile dev logs -f khater-dev` و برای توقف آن از `docker compose --profile dev down` استفاده کنید.
+
+در هر دو حالت، لندینگ فارسی از `/`، انگلیسی از `/en/`، صفحه‌های معرفی محصول از `/about.html` و `/en/about.html` و خود برنامه از `/app.html` باز می‌شوند. برای تغییر پورت‌های پیش‌فرض، متغیرهای `KHATER_PORT` و `KHATER_DEV_PORT` را در فایل `.env` کنار `compose.yaml` تعریف کنید؛ برای نمونه `KHATER_PORT=8081`.
 
 ## 🧱 ساختار کد
 
