@@ -9,7 +9,8 @@
   const browserLanguage = primaryBrowserLanguage === 'fa' || primaryBrowserLanguage === 'en'
     ? primaryBrowserLanguage
     : null;
-  const preferredLanguage = browserLanguage || (currentLanguage === 'fa' ? 'en' : null);
+  const preferredLanguage = currentLanguage === 'fa' ? 'en' : browserLanguage === 'fa' ? 'fa' : null;
+  const promptLanguage = browserLanguage || currentLanguage;
 
   document.querySelectorAll('a[hreflang="fa"], a[hreflang="en"], a[lang="fa"], a[lang="en"]').forEach((link) => {
     link.addEventListener('click', () => {
@@ -36,22 +37,26 @@
 
   const prompt = document.createElement('aside');
   prompt.className = 'language-suggestion';
-  prompt.lang = preferredLanguage;
-  prompt.dir = preferredLanguage === 'fa' ? 'rtl' : 'ltr';
-  prompt.setAttribute('aria-label', preferredLanguage === 'fa' ? 'پیشنهاد زبان' : 'Language suggestion');
+  prompt.lang = promptLanguage;
+  prompt.dir = promptLanguage === 'fa' ? 'rtl' : 'ltr';
+  prompt.setAttribute('aria-label', promptLanguage === 'fa' ? 'پیشنهاد زبان' : 'Language suggestion');
 
   const message = document.createElement('p');
   message.textContent = preferredLanguage === 'fa'
     ? 'زبان مرورگرتان فارسی است. نسخهٔ فارسی سایت هم در دسترس است.'
-    : browserLanguage === 'en'
-      ? 'Your browser appears to use English. Would you like to view the English version?'
-      : 'This site is also available in English. Would you like to view the English version?';
+    : promptLanguage === 'fa'
+      ? 'این سایت به زبان انگلیسی هم موجود است. مایلید نسخهٔ انگلیسی را ببینید؟'
+      : browserLanguage === 'en'
+        ? 'Your browser appears to use English. Would you like to view the English version?'
+        : 'This site is also available in English. Would you like to view the English version?';
 
   const action = document.createElement('a');
   action.href = languageLink.href;
   action.hreflang = preferredLanguage;
   action.className = 'language-suggestion__action';
-  action.textContent = preferredLanguage === 'fa' ? 'نمایش نسخهٔ فارسی' : 'View English version';
+  action.textContent = preferredLanguage === 'fa'
+    ? 'نمایش نسخهٔ فارسی'
+    : promptLanguage === 'fa' ? 'نمایش نسخهٔ انگلیسی' : 'View English version';
   action.addEventListener('click', () => {
     try {
       localStorage.setItem(storageKey, preferredLanguage);
@@ -64,7 +69,7 @@
   const dismiss = document.createElement('button');
   dismiss.type = 'button';
   dismiss.className = 'language-suggestion__dismiss';
-  dismiss.setAttribute('aria-label', preferredLanguage === 'fa' ? 'بستن پیشنهاد زبان' : 'Dismiss language suggestion');
+  dismiss.setAttribute('aria-label', promptLanguage === 'fa' ? 'بستن پیشنهاد زبان' : 'Dismiss language suggestion');
   dismiss.textContent = '×';
   dismiss.addEventListener('click', () => {
     try { localStorage.setItem(dismissedKey, currentLanguage); } catch (_) { /* Ignore unavailable storage. */ }
