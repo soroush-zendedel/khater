@@ -24,7 +24,9 @@
   });
 
   try {
-    if (localStorage.getItem(storageKey) || localStorage.getItem(dismissedKey) || !preferredLanguage || preferredLanguage === currentLanguage) return;
+    const savedLanguage = localStorage.getItem(storageKey);
+    const dismissedLanguage = localStorage.getItem(dismissedKey);
+    if (savedLanguage === currentLanguage || dismissedLanguage === currentLanguage || !preferredLanguage || preferredLanguage === currentLanguage) return;
   } catch (_) {
     if (!preferredLanguage || preferredLanguage === currentLanguage) return;
   }
@@ -65,7 +67,7 @@
   dismiss.setAttribute('aria-label', preferredLanguage === 'fa' ? 'بستن پیشنهاد زبان' : 'Dismiss language suggestion');
   dismiss.textContent = '×';
   dismiss.addEventListener('click', () => {
-    try { localStorage.setItem(dismissedKey, '1'); } catch (_) { /* Ignore unavailable storage. */ }
+    try { localStorage.setItem(dismissedKey, currentLanguage); } catch (_) { /* Ignore unavailable storage. */ }
     prompt.remove();
   });
 
