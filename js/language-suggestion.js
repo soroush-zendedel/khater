@@ -1,6 +1,6 @@
 (function () {
-  const storageKey = 'preferred-site-language';
-  const dismissedKey = 'language-suggestion-dismissed';
+  const storageKey = 'preferred-site-language-v2';
+  const dismissedKey = 'language-suggestion-dismissed-v2';
   const currentLanguage = document.documentElement.lang.toLowerCase().startsWith('fa') ? 'fa' : 'en';
   const browserLanguages = navigator.languages && navigator.languages.length
     ? navigator.languages
