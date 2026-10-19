@@ -53,6 +53,12 @@ pnpm preview
 
 Workflow فایل `.github/workflows/pages.yml` با هر push به شاخه‌ی `main` سایت را build و در GitHub Pages منتشر می‌کند؛ اجرای دستی آن نیز از تب Actions ممکن است. برای فعال‌سازی اولیه، در مخزن GitHub به **Settings → Pages → Build and deployment → Source** بروید و **GitHub Actions** را انتخاب کنید. آدرس پروژه پس از انتشار `https://soroush-zendedel.github.io/khater/` خواهد بود.
 
+مسیر پایه‌ی انتشار `/khater/` است؛ فایل‌های HTML چندصفحه‌ای در ریشه‌ی پروژه و در پوشه‌ی `en/` قرار دارند. صفحه‌های اصلی فارسی و انگلیسی (`/` و `/en/`) و صفحه‌های معرفی متناظر (`/about.html` و `/en/about.html`) canonical و hreflang هم‌زبان دارند. برنامه در `/app.html` فعلاً فارسی است و alternate انگلیسی ندارد. فایل‌های `sitemap.xml` و `robots.txt` متعلق به این پروژه به مسیر `/khater/` اشاره می‌کنند.
+
+### SEO و داده‌های ساخت‌یافته
+
+canonical و Open Graph با URLهای مطلق و مسیر انتشار GitHub Pages تنظیم شده‌اند. hreflang فقط برای صفحه‌های فارسی و انگلیسیِ معادل استفاده می‌شود. هیچ JSON-LD دستی در صفحه‌های ورودی نگهداری نمی‌شود؛ افزونه‌ی Vite در `vite.config.js` برای صفحه‌های معرفی فارسی و انگلیسی، breadcrumb قابل‌مشاهده و `BreadcrumbList` JSON-LD را از یک تعریف مشترک می‌سازد. مسیر آن‌ها از ریشه‌ی شخصی `https://soroush-zendedel.github.io/` به صفحه‌ی اصلی خط‌ِر و سپس صفحه‌ی معرفی می‌رسد. صفحه‌های اصلی و برنامه مقصد مستقل‌اند و breadcrumb ندارند. WebApplication و WebSite قبلی حذف شده‌اند؛ این داده‌ها rich result مستند و متناسبی برای این صفحات ایجاد نمی‌کردند.
+
 ### اجرا با Docker Compose
 
 برای دیدن نسخه‌ی production، در پوشه‌ی پروژه اجرا کنید:

@@ -42,6 +42,12 @@ a { overflow-wrap: anywhere; }
 .public-page img { height: auto; }
 .public-page .public-container { width: min(100% - 2rem, 72rem); margin-inline: auto; }
 .public-page .public-card { min-width: 0; overflow-wrap: anywhere; }
+.seo-breadcrumb { padding-block: .75rem; color: var(--public-muted); font-size: .9rem; }
+.seo-breadcrumb ol { display: flex; flex-wrap: wrap; align-items: center; gap: .4rem .65rem; margin: 0; padding: 0; list-style: none; }
+.seo-breadcrumb li { display: inline-flex; align-items: center; gap: .65rem; }
+.seo-breadcrumb li + li::before { content: '/'; color: #94a3b8; }
+.seo-breadcrumb a { color: #334155; text-underline-offset: .2em; }
+.seo-breadcrumb [aria-current="page"] { color: var(--public-ink); font-weight: 600; }
 .public-page .public-action {
   display: inline-flex;
   align-items: center;
